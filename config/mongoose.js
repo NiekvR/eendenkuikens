@@ -4,6 +4,7 @@ var config = require('./config'),
     mongoose = require('mongoose');
 
 module.exports = function() {
+    console.log('ENV: ' + process.env.NODE_ENV);
     var db = mongoose.connect(config.db);
 
     require('../app/models/user.server.model');
