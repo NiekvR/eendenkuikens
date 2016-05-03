@@ -39,6 +39,7 @@ exports.create = function(req, res) {
 
                 fs.rename(tempPath, targetPath, function(err) {
                     if(err) {
+                        console.log(err);
                         throw err
                     } else {
                         sighting.photo = savePath;
