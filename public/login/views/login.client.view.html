@@ -1,0 +1,14 @@
+<section ng-controller="LoginController">
+    <div data-ng-show="!authentication.user">
+        <a href="/signup">Signup</a>
+        <a href="/signin">Signin</a>
+    </div>
+    <div data-ng-show="authentication.user">
+        <h1>Hello <span data-ng-bind="authentication.user.fullName"></span></h1>
+        <a href="/signout">Signout</a>
+        <ul>
+            <li><a href="/#!/sightings">List sighting</a></li>
+            <li><a href="/#!/sighting/create">Create sighting</a></li>
+        </ul>
+    </div>
+</section>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org">
+<head>
+    <title><%= title %></title>
+    <link href="css/core.css" rel="stylesheet"/>
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css" rel="stylesheet"/>
+</head>
+<body>
+
+<section ng-view></section>
+
+<script type="text/javascript">
+    window.user = <%- user || 'null' %>;
+</script>
+
+<script type="text/javascript" src="/lib/angular/angular.js"></script>
+<script type="text/javascript" src="/lib/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="/lib/angular-resource/angular-resource.js"></script>
+<script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src='/lib/lodash/lodash.js'></script>
+<script type="text/javascript" src='/lib/angular-simple-logger/dist/angular-simple-logger.js'></script>
+<script type="text/javascript" src='/lib/angular-google-maps/dist/angular-google-maps.js'></script>
+<script type="text/javascript" src='/lib/ng-file-upload/ng-file-upload.js'></script>
+<script type="text/javascript" src='/lib/ng-file-upload-shim/ng-file-upload-shim.js'></script>
+<script type="text/javascript" src='/lib/angular-bootstrap/ui-bootstrap.min.js'></script>
+<script type="text/javascript" src='/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'></script>
+
+
+<script type="text/javascript" src="/sighting/sighting.client.module.js"></script>
+<script type="text/javascript" src="/sighting/controllers/sighting.client.controller.js"></script>
+<script type="text/javascript" src="/sighting/controllers/sightings.client.controller.js"></script>
+<script type="text/javascript" src="/sighting/config/sighting.client.routes.js"></script>
+<script type="text/javascript" src="/sighting/services/sighting.client.service.js"></script>
+
+
+<script type="text/javascript" src="/login/login.client.module.js"></script>
+<script type="text/javascript" src="/login/controllers/login.client.controller.js"></script>
+<script type="text/javascript" src="/login/config/login.client.routes.js"></script>
+
+<script type="text/javascript" src="/users/users.client.module.js"></script>
+<script type="text/javascript" src="/users/services/authentication.client.service.js"></script>
+
+<script type="text/javascript" src="/application.js"></script>
+</body>
+</html>

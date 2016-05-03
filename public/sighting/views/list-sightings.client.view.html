@@ -1,0 +1,39 @@
+<div data-ng-controller="sightingsController as sc">
+    <div ng-show="!sc.authentication.user">
+        <p>Je moet ingelogd zijn om deze pagina te bekijken</p>
+    </div>
+    <div ng-show="sc.authentication.user">
+        <a href="/signout">Signout</a>
+        <button ng-click="sc.csv()">Download csv</button>
+        <button ng-click="sc.writeZip()">Create zip</button>
+        <a ng-show="sc.locationZipFile" target="_self" download="jsd-photos.zip" href="sc.locationZipFile">jsd-photos.zip</a>
+        <table class="table table-hover" style="width:100%">
+            <tr>
+                <th>ID</th>
+                <th>Datum</th>
+                <th>Aantal</th>
+                <th>Leeftijd</th>
+                <th>Breedtegraad</th>
+                <th>Lengtegraad</th>
+                <th>Waarnemer</th>
+                <th>Email</th>
+                <th>Opmerking</th>
+                <th>AV</th>
+                <th>Photo</th>
+            </tr>
+            <tr ng-repeat="sighting in sc.sightings">
+                <td>{{sighting._id}}</td>
+                <td>{{sighting.sigthingDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{sighting.numberOfChicks}}</td>
+                <td>{{sighting.age}}</td>
+                <td>{{sighting.lat}}</td>
+                <td>{{sighting.lng}}</td>
+                <td>{{sighting.observerName}}</td>
+                <td>{{sighting.observerEmail}}</td>
+                <td>{{sighting.remarks}}</td>
+                <td>{{sighting.permission}}</td>
+                <td><img class="tumbnail_size" ng-src="{{sighting.photo}}"/></td>
+            </tr>
+        </table>
+    </div>
+</div>

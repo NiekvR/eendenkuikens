@@ -1,0 +1,143 @@
+label {
+    font-size: 20px;
+}
+
+#maincontainer {
+    width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#maincontainer img {
+    width: 1000px;
+}
+
+#maincontainer h1 {
+    float: left;
+    margin-right: 20px;
+}
+
+#maincontainer h3 {
+    float: left;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+#maincontainer form {
+    width: 500px;
+}
+
+#maincontainer form label {
+    width: 180px;
+    font-size: 20px;
+}
+
+#maincontainer form input.input-lg {
+    height: 30px;
+}
+
+.angular-google-map-container {
+    position: relative;
+    float: right;
+    height: 400px;
+    width: 400px;
+    top: -200px;
+    margin-right: 5px;
+}
+
+#maincontainer div.containerimage img {
+    width: 100px;
+    height: 100px;
+}
+
+#maincontainer div.containerimage p {
+    width:100px;
+    text-align: center;
+}
+
+#maincontainer div.containerimage {
+    float: left;
+    margin-right: 50px;
+    margin-bottom: 5px;
+}
+
+#maincontainer div a {
+    width: 100px;
+    height: 100px;
+}
+
+.subcontainer {
+    width: 500px;
+}
+
+.background {
+    background-color: #2aaef5;
+}
+
+.locatielabel {
+    font-size: 20px;
+    position: relative;
+    float: right;
+    top: -230px;
+    right: 400px;
+}
+
+.widthlabel {
+    width: 200px;
+    float: left;
+}
+
+.widthinput {
+    width: 200px;
+}
+
+.backgroundimage {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: url(../img/duck.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+.submitbutton {
+    width: 250px;
+    position: absolute;
+    top: 600px;
+    left: 660px;
+}
+
+.floatleft {
+    float: left;
+}
+
+.errortext {
+    color: red;
+}
+
+#maincontainer img.information_img {
+    width:16px;
+}
+
+.margin_info {
+    margin: 0 4px;
+}
+
+.backgroundImageInformation {
+    background-image: url(../img/information.png);
+    height: 16px;
+    width: 16px;
+}
+
+.tumbnail_size {
+    height: 100px;
+    max-width: 150px;
+}
+
+table.table th,td {
+    max-width: 150px;
+    word-wrap: break-word;
+}
