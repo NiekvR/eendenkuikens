@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -14,4 +14,4 @@ var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 app.listen(port, ip);
 module.exports = app;
 
-console.log('Server running at http://'+ip+':'+port);
+console.log('Server running at http://'+ip+':'+port);*/
