@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
     fs = require('fs-extra'),
     path = require('path'),
     json2csv = require('json2csv'),
-    archiver = require('archiver');
+    archiver = require('archiver'),
+    mv = require('mv');
 
 var getErrorMessage = function(err) {
     if (err.errors) {
@@ -37,7 +38,7 @@ exports.create = function(req, res) {
                 var targetPath = path.join(__dirname,'../../public/img/uploads/' + uploadDate + file.originalFilename);
                 var savePath = 'img/uploads/' + uploadDate + file.originalFilename;
 
-                fs.rename(tempPath, targetPath, function(err) {
+                mv(tempPath, targetPath, function(err) {
                     if(err) {
                         console.log(err);
                         throw err
@@ -53,7 +54,7 @@ exports.create = function(req, res) {
                             }
                         })
                     }
-                })
+                });
             }
         }
         console.log('Upload complete for observation: ' + sighting._id);
