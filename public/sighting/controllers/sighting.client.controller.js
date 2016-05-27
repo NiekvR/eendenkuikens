@@ -20,9 +20,6 @@
             zoom: 6,
             events: {
                 click: function (maps, eventName, args) {
-                    var latitude = args[0].latLng.lat();
-                    var longitude = args[0].latLng.lng();
-                    console.log(latitude + ', ' + longitude);
                     placeMarker(args[0].latLng, maps)
                 }
             }
