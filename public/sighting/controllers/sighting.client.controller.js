@@ -39,6 +39,10 @@
             vm.marker.setPosition(location);
             vm.marker.setMap(maps);
         }
+		
+		function deleteMarker() {
+            vm.marker.setMap(null);
+        }
 
         uiGmapGoogleMapApi.then(function(maps) {
         });
@@ -74,10 +78,23 @@
                         data: {sighting: sighting},
                         file: file
                     }).success(function (data) {
-                        //TODO: Add success logic
+                        clearFields();
+                        deleteMarker();
+                        $.notify({
+                            message: "Je waarneming is correct ingevoerd. Je kunt nu nog een waarneming invoeren...",
+                            icon: 'glyphicon glyphicon-ok-sign'
+                        },{
+                            type: 'success'
+                        });
                     }).error(function (error) {
                         $scope.error = error.message;
-                        console.log(error)
+                        console.log(error);
+                        $.notify({
+                            message: error,
+                            icon: 'glyphicon glyphicon-remove-sign'
+                        },{
+                            type: 'danger'
+                        });
                     })
                 }
             } else {
@@ -102,3 +119,9 @@
         };
     }
 })();
+
+function clearFields() {
+    $('input').val('').attr('autocomplete', 'off');
+    $('input[type=checkbox]').attr('checked', false);
+    $('.containerimage').removeClass('background');
+}
