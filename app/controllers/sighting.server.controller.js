@@ -4,8 +4,7 @@ var mongoose = require('mongoose'),
     path = require('path'),
     json2csv = require('json2csv'),
     archiver = require('archiver'),
-    mv = require('mv'),
-    EasyZip = require('easy-zip').EasyZip;;
+    mv = require('mv');
 
 var getErrorMessage = function(err) {
     if (err.errors) {
