@@ -83,6 +83,7 @@
 
         $scope.create = function(file) {
             if(checkFileType(file)) {
+                $scope.error = null;
                 if (vm.marker) {
                     vm.lat = vm.marker.getPosition().lat();
                     vm.lng = vm.marker.getPosition().lng();
