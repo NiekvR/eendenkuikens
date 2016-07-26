@@ -82,52 +82,56 @@
         };
 
         $scope.create = function(file) {
-            if(vm.marker) {
-                vm.lat = vm.marker.getPosition().lat();
-                vm.lng = vm.marker.getPosition().lng();
-            }
-            if(this.permission === true) {
-                console.log('In Send Method' + this);
-                var sighting = new sightingService({
-                    sigthingDate: this.sigthingDate,
-                    numberOfChicks: this.numberOfChicks,
-                    observerName: this.observerName,
-                    observerEmail: this.observerEmail,
-                    gezinEerderGemeld: this.gezinEerderGemeld,
-                    remarks: this.remarks,
-                    permission: this.permission,
-                    lat: vm.lat,
-                    lng: vm.lng,
-                    age: vm.age
-                });
+            if(checkFileType(file)) {
+                if (vm.marker) {
+                    vm.lat = vm.marker.getPosition().lat();
+                    vm.lng = vm.marker.getPosition().lng();
+                }
+                if (this.permission === true) {
+                    console.log('In Send Method' + this);
+                    var sighting = new sightingService({
+                        sigthingDate: this.sigthingDate,
+                        numberOfChicks: this.numberOfChicks,
+                        observerName: this.observerName,
+                        observerEmail: this.observerEmail,
+                        gezinEerderGemeld: this.gezinEerderGemeld,
+                        remarks: this.remarks,
+                        permission: this.permission,
+                        lat: vm.lat,
+                        lng: vm.lng,
+                        age: vm.age
+                    });
 
-                if (sighting) {
-                    Upload.upload({
-                        url: '/api/sighting',
-                        method: 'POST',
-                        data: {sighting: sighting},
-                        file: file
-                    }).success(function () {
-                        $.notify({
-                            message: "Je waarneming is correct ingevoerd. Je kunt nu nog een waarneming invoeren...",
-                            icon: 'glyphicon glyphicon-ok-sign'
-                        },{
-                            type: 'success'
-                        });
-                        window.location.reload();
-                    }).error(function (error) {
-                        $scope.error = error.message;
-                        console.log(error);
-                        $.notify({
-                            message: 'Het versturen van je waarneming is niet gelukt.',
-                            icon: 'glyphicon glyphicon-remove-sign'
-                        },{
-                            type: 'danger'
-                        });
-                    })
+                    if (sighting) {
+                        Upload.upload({
+                            url: '/api/sighting',
+                            method: 'POST',
+                            data: {sighting: sighting},
+                            file: file
+                        }).success(function () {
+                            $.notify({
+                                message: "Je waarneming is correct ingevoerd. Je kunt nu nog een waarneming invoeren...",
+                                icon: 'glyphicon glyphicon-ok-sign'
+                            }, {
+                                type: 'success'
+                            });
+                            window.location.reload();
+                        }).error(function (error) {
+                            $scope.error = error.message;
+                            console.log(error);
+                            $.notify({
+                                message: 'Het versturen van je waarneming is niet gelukt.',
+                                icon: 'glyphicon glyphicon-remove-sign'
+                            }, {
+                                type: 'danger'
+                            });
+                        })
+                    }
+                } else {
+                    $scope.permissionError = 'Je moet de voorwaarden accepteren om uw waarneming in te sturen.';
                 }
             } else {
-                $scope.permissionError = 'Je moet de voorwaarden accepteren om uw waarneming in te sturen.';
+                $scope.error = 'Het bestand dat u probeerd te uploaden voldoet niet aan de eisen. U kan alleen images uploaden.';
             }
         };
 
@@ -150,5 +154,13 @@
                 });
             }
         };
+
+        function checkFileType(file) {
+            if (file.type.match('image.*')) {
+                return true
+            } else {
+                return false
+            }
+        }
     }
 })();
