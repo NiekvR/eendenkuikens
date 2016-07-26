@@ -9,14 +9,14 @@
             <img class="information_img" src="img/information.png"/>
         </a>
         <input id="datepicker-sightingDate" type="text" class="input-lg"
-               data-ng-model="sigthingDate"
+               data-ng-model="sigthingDate" maxlength="10"
                name="date" required>
         <i ng-show="myForm.date.$error.required" id="daterequired">*required</i>
         <label>Aantal kuikens:</label>
         <a popover-placement="top" uib-popover={{ic.helpTekstAantalKuikens}}>
             <img class="information_img" src="img/information.png"/>
         </a>
-        <input class="input-lg"
+        <input class="input-lg" maxlength="2"
                data-ng-model="numberOfChicks"
                id="numberOfChicks"
                name="numberOfChicks" required>
@@ -26,14 +26,14 @@
         <a popover-placement="top" uib-popover={{ic.helpTekstNaam}}>
             <img class="information_img" src="img/information.png"/>
         </a>
-        <input class="input-lg" data-ng-model="observerName" id="observerName">
+        <input class="input-lg" data-ng-model="observerName" id="observerName" maxlength="100">
         </div>
         <div>
         <label>Uw emailadres:</label>
         <a popover-placement="top" uib-popover={{ic.helpTekstEmailadres}}>
             <img class="information_img" src="img/information.png"/>
         </a>
-        <input class="input-lg" data-ng-model="observerEmail" id="observerEmail">
+        <input class="input-lg" data-ng-model="observerEmail" id="observerEmail" maxlength="100">
         </div>
         <div>
             <label>Gezin eerder gemeld:</label>
@@ -47,7 +47,7 @@
         <a popover-placement="top" uib-popover={{ic.helpTekstBijzonderheden}}>
             <img class="information_img" src="img/information.png"/>
         </a>
-        <input class="input-lg" data-ng-model="remarks" id="remarks">
+        <input class="input-lg" data-ng-model="remarks" id="remarks" maxlength="4000">
         </div>
         <div>
             <label class="floatleft">Photo:</label>
@@ -59,8 +59,8 @@
                accept="image/*" ngf-max-size="2MB" required
                ngf-model-invalid="errorFile">
         </div>
-        <i class="errortext" ng-show="myForm.file.$error.maxSize">File too large
-                {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+        <i class="errortext" ng-show="myForm.file.$error.maxSize">Uw bestand ({{errorFile.size / 1000000|number:1}}MB) is
+            te groot (>2MB).</i>
         </br>
         <label>Leeftijd:</label>
         <a popover-placement="top" uib-popover={{ic.helpTekstLeeftijd}}>
