@@ -4,7 +4,8 @@ var mongoose = require('mongoose'),
     path = require('path'),
     json2csv = require('json2csv'),
     archiver = require('archiver'),
-    mv = require('mv');
+    mv = require('mv'),
+    EasyZip = require('easy-zip').EasyZip;;
 
 var getErrorMessage = function(err) {
     if (err.errors) {
@@ -20,6 +21,7 @@ exports.create = function(req, res) {
     console.log(req.body);
     console.log(req.files.file);
     var sighting = new Sighting(req.body.sighting);
+    console.log('log: '+ sighting.waarnemingId);
     sighting.save(function(err) {
         if (err) {
             console.log(err);
@@ -35,6 +37,7 @@ exports.create = function(req, res) {
                 uploadDate = uploadDate.replace(':','');
 
                 var tempPath = file.path;
+
                 var targetPath = path.join(__dirname,'../../public/img/uploads/' + uploadDate + file.originalFilename);
                 var savePath = 'img/uploads/' + uploadDate + file.originalFilename;
 
@@ -55,9 +58,37 @@ exports.create = function(req, res) {
                         })
                     }
                 });
+
+                //fs.rename(tempPath, targetPath, function(err) {
+                //    if(err) {
+                //        console.log(err);
+                //        throw err
+                //    } else {
+                //        sighting.photo = savePath;
+                //        sighting.save(function(err) {
+                //            if(err) {
+                //                return res.status(400).send({
+                //                    message: getErrorMessage(err)
+                //                });
+                //            } else {
+                //                console.log('Upload complete for file: ' + file.originalFilename);
+                //            }
+                //        })
+                //    }
+                //})
             }
         }
         console.log('Upload complete for observation: ' + sighting._id);
+        console.log('waarnemingId: ' + sighting.waarnemingIdCount);
+        sighting.waarnemingId = 'EK' + sighting.waarnemingIdCount;
+        sighting.save(function(err) {
+                        if(err) {
+                            return res.status(400).send({
+                                message: getErrorMessage(err)
+                            });
+                        }
+                    });
+        console.log('waarnemingId: ' + sighting.waarnemingId);
         res.json(sighting);
     });
 };
@@ -75,7 +106,7 @@ exports.list = function(req, res) {
     });
 };
 
-var fields = ['sigthingDate', 'numberOfChicks', 'observerName', 'observerEmail', 'remarks', 'lat', 'lng', 'age', 'permission', 'photo'];
+var fields = ['sigthingDate', 'waarnemingId', 'numberOfChicks', 'observerName', 'observerEmail', 'remarks', 'lat', 'lng', 'age', 'permission', 'photo'];
 
 exports.csv = function(req, res) {
     Sighting.find().sort('-sigthingDate').exec(function(err, sightings) {
@@ -111,24 +142,57 @@ exports.writeZip = function(req, res) {
         output = fs.createWriteStream(basedir + zipName),
         archive = archiver('zip');
 
+    console.log('Filearray: '+fileArray);
+
+    archive.on('error', function(err) {
+        console.error(err);
+        res.status(500).send({error: err.message});
+    });
+
+    output.on('close', function() {
+        console.log('Archive wrote %d bytes', archive.pointer());
+        return res.status(200).send(downloaddir).end();
+    });
+
+    res.attachment('myzip.zip');
+
     archive.pipe(output);
 
     fileArray.forEach(function(item){
-        var file = item.path + item.name;
-        archive.append(fs.createReadStream(file), { name: item.name });
+        if(item.name !== '.DS_Store') {
+            var file = item.path + item.name;
+            archive.append(fs.createReadStream(file), { name: item.name });
+        }
     });
+
     console.log('Archive: ' + archive);
 
-    archive.finalize(function(err, written) {
-        if (err) {
-            throw err;
-        }
-        // do cleanup
-        //cleanUp(dir);
-    });
-    console.log(downloaddir);
-    res.download(basedir + zipName)
+    archive.finalize();
 };
+
+exports.deletefotos = function(req, res) {
+    var basedir = 'public/img/',
+        dir = basedir + 'uploads/',
+        message = deleteDirectoryContent(dir);
+
+
+    res.status(message.status).send(message.message).end();
+};
+
+function deleteDirectoryContent(dir) {
+    var files = fs.readdirSync(dir);
+    files.forEach(function(file){
+        console.log("Deleting file:" + file);
+        fs.unlink(dir+file, function(err) {
+            if(err) {
+                console.log("Error: " +err);
+                throw err
+            }
+        });
+    });
+    console.log("Deleting fotos completed");
+    return {status: 200, message: 'OK'};
+}
 
 function getDirectoryList(dir){
     var fileArray = [],
