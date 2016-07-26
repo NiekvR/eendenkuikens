@@ -20,7 +20,7 @@
                     anchor.attr({
                         href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
                         target: '_blank',
-                        download: 'filename.csv'
+                        download: 'sightings.csv'
                     })[0].click();
                 }).
                 error(function(data, status, headers, config) {
@@ -32,13 +32,29 @@
 
         vm.writeZip = function() {
             $http({method: 'GET', url: '/api/writezip'}).
-                success(function(response) {
-                    //var anchor = angular.element('<a/>');
-                    //anchor.attr({
-                    //    href: 'data:attachment/zip;charset=utf-8,' + encodeURI(response),
-                    //    target: '_blank',
-                    //    download: 'filename.zip'
-                    //})[0].click();
+                success(function(data, status, headers, config) {
+                    vm.locationZipFile = data;
+                    $.notify({
+                        message: "Je zip-file staat klaar. Klik op de zojuist verschenen jsd-photos.zip link om deze te downloaden",
+                        icon: 'glyphicon glyphicon-ok-sign'
+                    },{
+                        type: 'success'
+                    });
+                }).
+                error(function(response) {
+                    console.log('error')
+                });
+        };
+
+        vm.deleteFotos = function() {
+            $http({method: 'GET', url: '/api/deletefotos'}).
+                success(function(data, status, headers, config) {
+                    $.notify({
+                        message: "Alle foto's zijn verwijderd van de server. Ik hoop dat je ze eerst gedownload hebt :)",
+                        icon: 'glyphicon glyphicon-ok-sign'
+                    },{
+                        type: 'success'
+                    });
                 }).
                 error(function(response) {
                     console.log('error')

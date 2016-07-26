@@ -10,10 +10,37 @@
         vm.age = '';
         vm.lat = '';
         vm.lng = '';
+        vm.agerequired = true;
+        vm.locationrequired = true;
 
         vm.title = 'Eendenkuikenproject';
 
         vm.waarneming = '- Voer hier uw waarneming van families wilde eenden in.';
+
+        vm.helpTekstDatum = 'Wanneer heeft u de eendenkuikens gezien?';
+
+        vm.helpTekstAantalKuikens = 'Hoeveel kuikens telde u bij de moeder? Meld s.v.p. één gezin per waarneming.';
+
+        vm.helpTekstEmailadres = 'Geef s.v.p. een geldig e-mailadres op waarop we u kunnen bereiken voor eventuele ' +
+            'communicatie. Uw persoonlijke gegevens worden vertrouwelijk behandeld (zie algemene voorwaarden).';
+
+        vm.helpTekstFoto = 'Foto’s geven belangrijke extra informatie voor dit project. Daarom moedigen wij u  aan ' +
+            'een foto bij uw waarneming te uploaden. Het meest waardevol zijn foto’s waarop de kuikens en de moeder te zien zijn.';
+
+        vm.helpTekstLeeftijd = 'Selecteer hier s.v.p. de leeftijd van de eendenkuikens. Klik daarvoor op het plaatje ' +
+            'dat het best aansluit bij uw waarneming.';
+
+        vm.helpTekstLocatie = 'Klik op de kaart om de locatie van de eendenkuikens te selecteren. Zoom s.v.p. zo ver ' +
+            'mogelijk in om de juiste locatie aan te klikken.';
+
+        vm.helpTekstBijzonderheden = 'Hier kunt u extra informatie geven over uw waarneming. Geef hier s.v.p. toelichting ' +
+            'indien u dit gezin eerder gemeld heeft (waar en wanneer). Ook kunt u hier eventuele waarnemingen van kuikensterfte ' +
+            'melden (bijvoorbeeld als u heeft gezien dat kuikens werden gegrepen door een roofdier).';
+
+        vm.helpTekstGezin = 'Heeft u dit eendengezing eerder gezien?';
+
+        vm.helpTekstNaam = 'Deze naam gebruiken wij bij eventuele persoonlijke communicatie met u. Uw persoonlijke gegevens ' +
+            'worden vertrouwelijk behandeld (zie algemene voorwaarden).';
 
         $scope.map = {
             center: {latitude: 52.5, longitude: 5.5},
@@ -25,6 +52,8 @@
             }
         };
 
+        vm.sigthingDate = 'TEst';
+
         vm.marker = null;
 
         function placeMarker(location, maps) {
@@ -35,9 +64,10 @@
             }
             vm.marker.setPosition(location);
             vm.marker.setMap(maps);
+            vm.locationrequired = false;
         }
-		
-		function deleteMarker() {
+
+        function deleteMarker() {
             vm.marker.setMap(null);
         }
 
@@ -48,6 +78,7 @@
             $('.containerimage').removeClass('background');
             $('#ageSelect' + id).addClass('background');
             vm.age = id;
+            vm.agerequired = false;
         };
 
         $scope.create = function(file) {
@@ -56,11 +87,13 @@
                 vm.lng = vm.marker.getPosition().lng();
             }
             if(this.permission === true) {
+                console.log('In Send Method' + this);
                 var sighting = new sightingService({
                     sigthingDate: this.sigthingDate,
                     numberOfChicks: this.numberOfChicks,
                     observerName: this.observerName,
                     observerEmail: this.observerEmail,
+                    gezinEerderGemeld: this.gezinEerderGemeld,
                     remarks: this.remarks,
                     permission: this.permission,
                     lat: vm.lat,
@@ -74,20 +107,19 @@
                         method: 'POST',
                         data: {sighting: sighting},
                         file: file
-                    }).success(function (data) {
-                        clearFields();
-                        deleteMarker();
+                    }).success(function () {
                         $.notify({
                             message: "Je waarneming is correct ingevoerd. Je kunt nu nog een waarneming invoeren...",
                             icon: 'glyphicon glyphicon-ok-sign'
                         },{
                             type: 'success'
                         });
+                        window.location.reload();
                     }).error(function (error) {
                         $scope.error = error.message;
                         console.log(error);
                         $.notify({
-                            message: error,
+                            message: 'Het versturen van je waarneming is niet gelukt.',
                             icon: 'glyphicon glyphicon-remove-sign'
                         },{
                             type: 'danger'
@@ -98,6 +130,10 @@
                 $scope.permissionError = 'Je moet de voorwaarden accepteren om uw waarneming in te sturen.';
             }
         };
+
+        $('#permission').click(function() {
+            $scope.permissionError = null;
+        });
 
         $scope.delete = function(sighting) {
             if (sighting) {
@@ -116,9 +152,3 @@
         };
     }
 })();
-
-function clearFields() {
-    $('input').val('').attr('autocomplete', 'off');
-    $('input[type=checkbox]').attr('checked', false);
-    $('.containerimage').removeClass('background');
-}

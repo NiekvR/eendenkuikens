@@ -1,11 +1,9 @@
-label {
-    font-size: 20px;
+html, body, h1, #maincontainer {
+    font-family: 'Open Sans', sans-serif !important;
 }
 
 #maincontainer {
-    width: 1000px;
-    margin-right: auto;
-    margin-left: auto;
+    width: 700px;
 }
 
 #maincontainer img {
@@ -13,11 +11,12 @@ label {
 }
 
 #maincontainer h1 {
-    float: left;
+    font-size: 22px;
     margin-right: 20px;
 }
 
 #maincontainer h3 {
+    font-size: 13px;
     float: left;
     margin-top: 30px;
     margin-bottom: 20px;
@@ -29,21 +28,23 @@ label {
 
 #maincontainer form label {
     width: 180px;
-    font-size: 20px;
+    font-size: 13px;
 }
 
 #maincontainer form input.input-lg {
+    width: 224px;
     height: 30px;
+    padding: 0 16px;
 }
 
 .angular-google-map-container {
-    position: relative;
-    float: right;
     height: 400px;
     width: 400px;
-    top: -200px;
     margin-right: 5px;
+    margin-bottom: 20px;
 }
+
+
 
 #maincontainer div.containerimage img {
     width: 100px;
@@ -57,7 +58,7 @@ label {
 
 #maincontainer div.containerimage {
     float: left;
-    margin-right: 50px;
+    margin-right: 10px;
     margin-bottom: 5px;
 }
 
@@ -76,10 +77,6 @@ label {
 
 .locatielabel {
     font-size: 20px;
-    position: relative;
-    float: right;
-    top: -230px;
-    right: 400px;
 }
 
 .widthlabel {
@@ -103,19 +100,13 @@ label {
     overflow-x: hidden;
 }
 
-.submitbutton {
-    width: 250px;
-    position: absolute;
-    top: 510px;
-    left: 660px;
-}
-
 .floatleft {
     float: left;
 }
 
 .errortext {
     color: red;
+    width: 500px;
 }
 
 #maincontainer img.information_img {
@@ -140,4 +131,27 @@ label {
 table.table th,td {
     max-width: 150px;
     word-wrap: break-word;
+}
+
+#iframe {
+    width: 1000px;
+    height: 800px;
+}
+
+#gezinEerderGemeld {
+    margin-top: 5px;
+    height: 15px !important;
+}
+
+#sigthingDate {
+    display: inline-table;
+}
+
+.mapscontainer {
+    position: relative;
+    left: 100px;
+}
+
+input[type=file] {
+    display: inline-block !important;
 }
