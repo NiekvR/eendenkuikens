@@ -19,6 +19,7 @@
                 <th>Waarnemer</th>
                 <th>Email</th>
                 <th>GEG</th>
+                <th>Habitat</th>
                 <th>Opmerking</th>
                 <th>AV</th>
                 <th>Photo</th>
@@ -33,9 +34,11 @@
                 <td>{{sighting.observerName}}</td>
                 <td>{{sighting.observerEmail}}</td>
                 <td>{{sighting.gezinEerderGemeld}}</td>
+                <td>{{sighting.habitat}}</td>
                 <td>{{sighting.remarks}}</td>
                 <td>{{sighting.permission}}</td>
-                <td><a href="{{sighting.photo}}"><img class="tumbnail_size" ng-src="{{sighting.photo}}"/></a></td>
+                <td><div ng-if="sighting.photo"> <a href="{{sighting.photo}}"><img class="tumbnail_size" ng-src="{{sighting.photo}}"/></a></div>
+                <div ng-if="!sighting.photo">Geen foto beschikbaar{{}}</div></td>
             </tr>
         </table>
     </div>

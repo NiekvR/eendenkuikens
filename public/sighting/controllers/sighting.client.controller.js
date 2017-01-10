@@ -3,19 +3,19 @@
 
     app.controller('sightingController', sightingController);
 
-    sightingController.$inject = ['uiGmapGoogleMapApi','$scope','$routeParams', '$location','sightingService','Upload'];
-    function sightingController(uiGmapGoogleMapApi,$scope,$routeParams, $location, sightingService, Upload) {
+    sightingController.$inject = ['uiGmapGoogleMapApi','$scope','$routeParams', '$location', '$timeout','sightingService','Upload'];
+    function sightingController(uiGmapGoogleMapApi,$scope,$routeParams, $location, $timeout,sightingService, Upload) {
         var vm = this;
 
         vm.age = '';
         vm.lat = '';
         vm.lng = '';
         vm.agerequired = true;
-        vm.locationrequired = true;
 
         vm.title = 'Eendenkuikenproject';
 
-        vm.waarneming = '- Voer hier uw waarneming van families wilde eenden in.';
+        vm.waarneming = 'Voer hier uw waarneming van families wilde eenden in.';
+        vm.letOp = 'Let op: dit formulier is alleen bedoeld voor wilde eenden, dus niet voor krakeenden, slobeenden of andere eendensoorten.';
 
         vm.helpTekstDatum = 'Wanneer heeft u de eendenkuikens gezien?';
 
@@ -37,10 +37,12 @@
             'indien u dit gezin eerder gemeld heeft (waar en wanneer). Ook kunt u hier eventuele waarnemingen van kuikensterfte ' +
             'melden (bijvoorbeeld als u heeft gezien dat kuikens werden gegrepen door een roofdier).';
 
-        vm.helpTekstGezin = 'Heeft u dit eendengezing eerder gezien?';
+        vm.helpTekstGezin = 'Heeft u dit eendengezin eerder gezien en gemeld?';
 
         vm.helpTekstNaam = 'Deze naam gebruiken wij bij eventuele persoonlijke communicatie met u. Uw persoonlijke gegevens ' +
             'worden vertrouwelijk behandeld (zie algemene voorwaarden).';
+
+        vm.helpTekstHabitat = 'Selecteer hier de omgeving waarin het eendengezin verblijft.';
 
         $scope.map = {
             center: {latitude: 52.5, longitude: 5.5},
@@ -48,11 +50,10 @@
             events: {
                 click: function (maps, eventName, args) {
                     placeMarker(args[0].latLng, maps)
+                    $('#locationRequired').hide();
                 }
             }
         };
-
-        vm.sigthingDate = 'TEst';
 
         vm.marker = null;
 
@@ -64,11 +65,6 @@
             }
             vm.marker.setPosition(location);
             vm.marker.setMap(maps);
-            vm.locationrequired = false;
-        }
-
-        function deleteMarker() {
-            vm.marker.setMap(null);
         }
 
         uiGmapGoogleMapApi.then(function(maps) {
@@ -82,7 +78,15 @@
         };
 
         $scope.create = function(file) {
-            if(checkFileType(file)) {
+            if(file && !checkFileType(file)) {
+                $scope.error = 'Het bestand dat u probeerd te uploaden voldoet niet aan de eisen. U kan alleen images uploaden.';
+                $.notify({
+                    message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
+                    icon: 'glyphicon glyphicon-remove-sign'
+                }, {
+                    type: 'danger'
+                });
+            } else {
                 $scope.error = null;
                 if (vm.marker) {
                     vm.lat = vm.marker.getPosition().lat();
@@ -96,6 +100,7 @@
                         observerName: this.observerName,
                         observerEmail: this.observerEmail,
                         gezinEerderGemeld: this.gezinEerderGemeld,
+                        habitat: this.habitat,
                         remarks: this.remarks,
                         permission: this.permission,
                         lat: vm.lat,
@@ -116,12 +121,14 @@
                             }, {
                                 type: 'success'
                             });
-                            window.location.reload();
+                            $timeout(function() {
+                                window.location.reload();
+                            }, 2000);
                         }).error(function (error) {
                             $scope.error = error.message;
                             console.log(error);
                             $.notify({
-                                message: 'Het versturen van je waarneming is niet gelukt.',
+                                message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
                                 icon: 'glyphicon glyphicon-remove-sign'
                             }, {
                                 type: 'danger'
@@ -130,31 +137,19 @@
                     }
                 } else {
                     $scope.permissionError = 'Je moet de voorwaarden accepteren om uw waarneming in te sturen.';
+                    $.notify({
+                        message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
+                        icon: 'glyphicon glyphicon-remove-sign'
+                    }, {
+                        type: 'danger'
+                    });
                 }
-            } else {
-                $scope.error = 'Het bestand dat u probeerd te uploaden voldoet niet aan de eisen. U kan alleen images uploaden.';
-            }
+            } 
         };
 
         $('#permission').click(function() {
             $scope.permissionError = null;
         });
-
-        $scope.delete = function(sighting) {
-            if (sighting) {
-                sighting.$remove(function() {
-                    for (var i in $scope.sighting) {
-                        if ($scope.sighting[i] === sighting) {
-                            $scope.sighting.splice(i, 1);
-                        }
-                    }
-                });
-            } else {
-                $scope.sighting.$remove(function() {
-                    $location.path('sighting');
-                });
-            }
-        };
 
         function checkFileType(file) {
             if (file.type.match('image.*')) {

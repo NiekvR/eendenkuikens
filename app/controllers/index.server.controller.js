@@ -1,6 +1,6 @@
 exports.render = function(req, res) {
     res.render('index', {
-        title: 'Hello World',
+        title: 'Eendenkuikens Project',
         user: JSON.stringify(req.user)
     });
 };

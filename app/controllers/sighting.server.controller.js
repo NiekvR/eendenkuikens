@@ -57,24 +57,6 @@ exports.create = function(req, res) {
                         })
                     }
                 });
-
-                //fs.rename(tempPath, targetPath, function(err) {
-                //    if(err) {
-                //        console.log(err);
-                //        throw err
-                //    } else {
-                //        sighting.photo = savePath;
-                //        sighting.save(function(err) {
-                //            if(err) {
-                //                return res.status(400).send({
-                //                    message: getErrorMessage(err)
-                //                });
-                //            } else {
-                //                console.log('Upload complete for file: ' + file.originalFilename);
-                //            }
-                //        })
-                //    }
-                //})
             }
         }
         console.log('Upload complete for observation: ' + sighting._id);
@@ -105,7 +87,7 @@ exports.list = function(req, res) {
     });
 };
 
-var fields = ['sigthingDate', 'waarnemingId', 'numberOfChicks', 'observerName', 'observerEmail', 'remarks', 'lat', 'lng', 'age', 'permission', 'photo'];
+var fields = ['sigthingDate', 'waarnemingId', 'numberOfChicks', 'observerName', 'observerEmail', 'gezinEerderGemeld', 'habitat', 'remarks', 'lat', 'lng', 'age', 'permission', 'photo'];
 
 exports.csv = function(req, res) {
     Sighting.find().sort('-sigthingDate').exec(function(err, sightings) {
@@ -115,13 +97,12 @@ exports.csv = function(req, res) {
             });
         }
         else {
-            json2csv({ data: sightings, fields: fields, del: '\t' }, function(err, tsv) {
+            json2csv({ data: sightings, fields: fields, del: ';' }, function(err, tsv) {
                 if (err) {
                     return res.status(400).send({
                         message: getErrorMessage(err)
                     });
                 } else {
-                    console.log(tsv);
                     res.setHeader('content-type', 'text/csv');
                     res.setHeader('content-disposition', "attachment; filename='sightings.csv'");
                     res.set('Content-Type', 'application/octet-stream');

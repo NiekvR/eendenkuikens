@@ -3,16 +3,17 @@ html, body, h1, #maincontainer {
 }
 
 #maincontainer {
-    width: 700px;
-}
-
-#maincontainer img {
-    width: 1000px;
+    width: 500px;
+    padding: 5px;
 }
 
 #maincontainer h1 {
     font-size: 22px;
     margin-right: 20px;
+}
+
+#maincontainer h2 {
+    font-size: 18px;
 }
 
 #maincontainer h3 {
@@ -31,10 +32,12 @@ html, body, h1, #maincontainer {
     font-size: 13px;
 }
 
-#maincontainer form input.input-lg {
+#maincontainer form input[type="text"],
+#maincontainer form select {
     width: 224px;
     height: 30px;
     padding: 0 16px;
+    margin: 1px 0;
 }
 
 .angular-google-map-container {
@@ -111,6 +114,11 @@ html, body, h1, #maincontainer {
 
 #maincontainer img.information_img {
     width:16px;
+}
+
+#maincontainer span.no_information_icon {
+    display: inline-block;
+    width:19px;
 }
 
 .margin_info {
