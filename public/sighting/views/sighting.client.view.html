@@ -1,9 +1,6 @@
 <div id="maincontainer" data-ng-controller="sightingController as ic">
     <h1 class="text-center"><strong>{{ic.title}}</strong></h1><h2 class="help-block text-center">{{ic.waarneming}}</h1>
     <p class="text-center">{{ic.letOp}}</p>
-    <div data-ng-show="error" class="errortext">
-        <strong data-ng-bind="error"></strong>
-    </div>
     <form class="form-inline" name="myForm" novalidate>
         <div class="form-group">
             <label>Datum:</label>
@@ -135,6 +132,9 @@
         <div class="submitbutton">
             <div data-ng-show="permissionError" class="errortext">
                 <strong data-ng-bind="permissionError"></strong>
+            </div>
+            <div data-ng-show="error" class="errortext">
+                <strong data-ng-bind="error"></strong>
             </div>
             <label></label>
             <input  type="checkbox" data-ng-model="permission" id="permission">Ik ga akkoord met de <a href="/#!/voorwaarden" target="_blank">voorwaarden</a>

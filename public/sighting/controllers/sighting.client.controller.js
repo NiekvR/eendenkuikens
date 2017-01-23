@@ -25,7 +25,8 @@
             'communicatie. Uw persoonlijke gegevens worden vertrouwelijk behandeld (zie algemene voorwaarden).';
 
         vm.helpTekstFoto = 'Foto’s geven belangrijke extra informatie voor dit project. Daarom moedigen wij u  aan ' +
-            'een foto bij uw waarneming te uploaden. Het meest waardevol zijn foto’s waarop de kuikens en de moeder te zien zijn.';
+            'een foto bij uw waarneming te uploaden. Het meest waardevol zijn foto’s waarop de kuikens en de moeder te zien zijn. ' +
+            'De maximale grootte van het bestand is 2 MB.';
 
         vm.helpTekstLeeftijd = 'Selecteer hier s.v.p. de leeftijd van de eendenkuikens. Klik daarvoor op het plaatje ' +
             'dat het best aansluit bij uw waarneming.';
@@ -93,7 +94,6 @@
                     vm.lng = vm.marker.getPosition().lng();
                 }
                 if (this.permission === true) {
-                    console.log('In Send Method' + this);
                     var sighting = new sightingService({
                         sigthingDate: this.sigthingDate,
                         numberOfChicks: this.numberOfChicks,
@@ -126,12 +126,12 @@
                             }, 2000);
                         }).error(function (error) {
                             $scope.error = error.message;
-                            console.log(error);
                             $.notify({
                                 message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
                                 icon: 'glyphicon glyphicon-remove-sign'
                             }, {
-                                type: 'danger'
+                                type: 'danger',
+                                position: 'top left'
                             });
                         })
                     }
@@ -141,7 +141,8 @@
                         message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
                         icon: 'glyphicon glyphicon-remove-sign'
                     }, {
-                        type: 'danger'
+                        type: 'danger',
+                        position: 'top left'
                     });
                 }
             } 

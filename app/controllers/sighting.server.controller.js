@@ -32,9 +32,8 @@ exports.create = function(req, res) {
                 var file = req.files.file;
                 var uploadDate = new Date().toISOString();
                 uploadDate = uploadDate.replace('.','');
-                uploadDate = uploadDate.replace('-','');
                 uploadDate = uploadDate.replace(':','');
-
+                uploadDate = uploadDate.replace(':','');
                 var tempPath = file.path;
 
                 var targetPath = path.join(__dirname,'../../public/img/uploads/' + uploadDate + file.originalFilename);
