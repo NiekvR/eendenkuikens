@@ -64,7 +64,7 @@
         </div>
         <div class="form-group">
             <label class="floatleft">Foto:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstFoto}} class="margin_info">
+            <a popover-placement="top" uib-popover={{ic.helpTekstFoto}}>
                 <img class="information_img" src="img/information.png"/>
             </a>
             <input type="file" ngf-select class="fileinput"
@@ -75,11 +75,13 @@
         <i class="errortext" ng-show="myForm.file.$error.maxSize">Uw bestand ({{errorFile.size / 1000000|number:1}}MB) is
             te groot (>2MB).</i>
         </br>
+        <div class="form-group">
         <label>Leeftijd:</label>
         <a popover-placement="top" uib-popover={{ic.helpTekstLeeftijd}}>
             <img class="information_img" src="img/information.png"/>
         </a>
         <i ng-if="ic.agerequired">*verplicht</i>
+        </div>
         <div class="subcontainer">
             <div id="ageSelect1" class="containerimage">
                 <p>0-1 week</p>
@@ -116,12 +118,13 @@
                 <img src="img/7+weken.png" ng-click="ic.selectAge(8)">
             </div>
         </div>
+        <div class="form-group">
         <label>Locatie:</label>
         <a popover-placement="bottom" uib-popover={{ic.helpTekstLocatie}}>
             <img class="information_img" src="img/information.png"/>
         </a>
         <i id="locationRequired">*verplicht</i>
-
+        </div>
         <ui-gmap-google-map center='map.center'
                             zoom='map.zoom'
                             events='map.events'
@@ -129,7 +132,7 @@
                             options='options'>
         </ui-gmap-google-map>
 
-        <div class="submitbutton">
+        <div class="form-group">
             <div data-ng-show="permissionError" class="errortext">
                 <strong data-ng-bind="permissionError"></strong>
             </div>
@@ -137,7 +140,7 @@
                 <strong data-ng-bind="error"></strong>
             </div>
             <label></label>
-            <input  type="checkbox" data-ng-model="permission" id="permission">Ik ga akkoord met de <a href="/#!/voorwaarden" target="_blank">voorwaarden</a>
+            <input  type="checkbox" data-ng-model="permission" id="permission">Ik ga akkoord met de <a class="voorwaarden" href="/#!/voorwaarden" target="_blank">voorwaarden</a>
             <label></label>
             <button ng-disabled="false" ng-click="create(picFile)">Versturen</button>
         </div>

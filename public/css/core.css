@@ -3,7 +3,7 @@ html, body, h1, #maincontainer {
 }
 
 #maincontainer {
-    width: 500px;
+    width: 700px;
     padding: 5px;
 }
 
@@ -28,16 +28,23 @@ html, body, h1, #maincontainer {
 }
 
 #maincontainer form label {
-    width: 180px;
+    width: 140px;
     font-size: 13px;
+    float: left;
 }
 
 #maincontainer form input[type="text"],
 #maincontainer form select {
-    width: 224px;
+    width: 200px;
     height: 30px;
     padding: 0 16px;
     margin: 1px 0;
+    float: left;
+}
+
+.form-group {
+    float: left;
+    width: 500px;
 }
 
 .angular-google-map-container {
@@ -66,8 +73,8 @@ html, body, h1, #maincontainer {
 }
 
 #maincontainer div a {
-    width: 100px;
-    height: 100px;
+    width: 20px;
+    float: left;
 }
 
 .subcontainer {
@@ -91,18 +98,6 @@ html, body, h1, #maincontainer {
     width: 200px;
 }
 
-.backgroundimage {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background: url(../img/duck.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    overflow-x: hidden;
-}
-
 .floatleft {
     float: left;
 }
@@ -121,10 +116,6 @@ html, body, h1, #maincontainer {
     width:19px;
 }
 
-.margin_info {
-    margin: 0 4px;
-}
-
 .backgroundImageInformation {
     background-image: url(../img/information.png);
     height: 16px;
@@ -139,11 +130,6 @@ html, body, h1, #maincontainer {
 table.table th,td {
     max-width: 150px;
     word-wrap: break-word;
-}
-
-#iframe {
-    width: 1000px;
-    height: 800px;
 }
 
 #gezinEerderGemeld {
@@ -162,4 +148,8 @@ table.table th,td {
 
 input[type=file] {
     display: inline-block !important;
+}
+
+.voorwaarden {
+    float: none !important;
 }

@@ -127,22 +127,20 @@
                         }).error(function (error) {
                             $scope.error = error.message;
                             $.notify({
-                                message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
+                                message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
                                 icon: 'glyphicon glyphicon-remove-sign'
                             }, {
-                                type: 'danger',
-                                position: 'top left'
+                                type: 'danger'
                             });
                         })
                     }
                 } else {
                     $scope.permissionError = 'Je moet de voorwaarden accepteren om uw waarneming in te sturen.';
                     $.notify({
-                        message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
+                        message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
                         icon: 'glyphicon glyphicon-remove-sign'
                     }, {
-                        type: 'danger',
-                        position: 'top left'
+                        type: 'danger'
                     });
                 }
             } 
