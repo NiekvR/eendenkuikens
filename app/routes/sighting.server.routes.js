@@ -22,22 +22,7 @@ module.exports = function(app) {
         //.put(users.requiresLogin, sighting.update)
         .delete(users.requiresLogin, sighting.delete);
 
-    app.route('/zipdownload').get(sighting.writeZip //function(req,resp){
-    //    console.log('test');
-    //    var dir = path.join(__dirname,'../../public/img/uploads/');
-    //    var fileArray = [],
-    //        files = fs.readdirSync(dir);
-    //    files.forEach(function(file){
-    //        var obj = {path: dir + file,name: file};
-    //        fileArray.push(obj);
-    //        console.log(obj)
-    //    });
-    //
-    //    if ( fileArray.length > 0 ){
-    //        resp.zip(fileArray);
-    //    }
-    //}
-    );
+    app.route('/zipdownload').get(sighting.writeZip);
 
     app.param('sightingId', sighting.sightingByID);
 };

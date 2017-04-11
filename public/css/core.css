@@ -153,3 +153,12 @@ input[type=file] {
 .voorwaarden {
     float: none !important;
 }
+
+.entry-succesfull {
+    background-color: #39BA2A;
+    text-align: center
+}
+
+#maincontainer .entry-succesfull a {
+    float: none;
+}

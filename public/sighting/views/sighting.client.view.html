@@ -145,6 +145,10 @@
             <button ng-disabled="false" ng-click="create(picFile)">Versturen</button>
         </div>
     </form>
+    <div class="entry-succesfull">
+        <h1>Waarneming succesvol ingevoerd.</h1>
+        <p>Klik <a href="javascript:reloadPage()">hier</a> om nog een waarneming in te voeren.</p>
+    </div>
 </div>
 <script>
     $(document).ready(function(){
@@ -157,4 +161,7 @@
             $('form i#daterequired').hide();
         });
     });
+    function reloadPage() {
+            window.location.reload();
+        }
 </script>

@@ -115,15 +115,8 @@
                             data: {sighting: sighting},
                             file: file
                         }).success(function () {
-                            $.notify({
-                                message: "Je waarneming is correct ingevoerd. Je kunt nu nog een waarneming invoeren...",
-                                icon: 'glyphicon glyphicon-ok-sign'
-                            }, {
-                                type: 'success'
-                            });
-                            $timeout(function() {
-                                window.location.reload();
-                            }, 2000);
+                            $('form').hide();
+                            $('.entry-succesfull').show();
                         }).error(function (error) {
                             $scope.error = error.message;
                             $.notify({
@@ -149,6 +142,8 @@
         $('#permission').click(function() {
             $scope.permissionError = null;
         });
+
+        $('.entry-succesfull').hide();
 
         function checkFileType(file) {
             if (file.type.match('image.*')) {

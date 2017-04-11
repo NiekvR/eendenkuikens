@@ -211,32 +211,3 @@ exports.delete = function(req, res) {
         }
     });
 };
-
-/*
-exports.update = function(req, res) {
-    var sighting = req.sighting;
-
-    sighting.title = req.body.title;
-    sighting.content = req.body.content;
-
-    sighting.save(function(err) {
-        if (err) {
-            return res.status(400).send({
-                message: getErrorMessage(err)
-            });
-        } else {
-            res.json(sighting);
-        }
-    });
-};
-
- exports.hasAuthorization = function(req, res, next) {
- if (req.article.creator.id !== req.user.id) {
- return res.status(403).send({
- message: 'User is not authorized'
- });
- }
- next();
- };
-
-*/
