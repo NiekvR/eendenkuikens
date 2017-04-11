@@ -78,65 +78,74 @@
             vm.agerequired = false;
         };
 
-        $scope.create = function(file) {
-            if(file && !checkFileType(file)) {
-                $scope.error = 'Het bestand dat u probeerd te uploaden voldoet niet aan de eisen. U kan alleen images uploaden.';
-                $.notify({
-                    message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
-                    icon: 'glyphicon glyphicon-remove-sign'
-                }, {
-                    type: 'danger'
-                });
-            } else {
-                $scope.error = null;
-                if (vm.marker) {
-                    vm.lat = vm.marker.getPosition().lat();
-                    vm.lng = vm.marker.getPosition().lng();
-                }
-                if (this.permission === true) {
-                    var sighting = new sightingService({
-                        sigthingDate: this.sigthingDate,
-                        numberOfChicks: this.numberOfChicks,
-                        observerName: this.observerName,
-                        observerEmail: this.observerEmail,
-                        gezinEerderGemeld: this.gezinEerderGemeld,
-                        habitat: this.habitat,
-                        remarks: this.remarks,
-                        permission: this.permission,
-                        lat: vm.lat,
-                        lng: vm.lng,
-                        age: vm.age
-                    });
+        vm.checkToPreventDoubleEntries = true;
 
-                    if (sighting) {
-                        Upload.upload({
-                            url: '/api/sighting',
-                            method: 'POST',
-                            data: {sighting: sighting},
-                            file: file
-                        }).success(function () {
-                            $('form').hide();
-                            $('.entry-succesfull').show();
-                        }).error(function (error) {
-                            $scope.error = error.message;
-                            $.notify({
-                                message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
-                                icon: 'glyphicon glyphicon-remove-sign'
-                            }, {
-                                type: 'danger'
-                            });
-                        })
-                    }
-                } else {
-                    $scope.permissionError = 'Je moet de voorwaarden accepteren om uw waarneming in te sturen.';
+        $scope.create = function(file) {
+            if(vm.checkToPreventDoubleEntries) {
+                vm.checkToPreventDoubleEntries = false;
+                if(file && !checkFileType(file)) {
+                    $scope.error = 'Het bestand dat u probeerd te uploaden voldoet niet aan de eisen. U kan alleen images uploaden.';
                     $.notify({
-                        message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
+                        message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
                         icon: 'glyphicon glyphicon-remove-sign'
                     }, {
                         type: 'danger'
                     });
-                }
-            } 
+                    vm.checkToPreventDoubleEntries = true;
+                } else {
+                    $scope.error = null;
+                    if (vm.marker) {
+                        vm.lat = vm.marker.getPosition().lat();
+                        vm.lng = vm.marker.getPosition().lng();
+                    }
+                    if (this.permission === true) {
+                        var sighting = new sightingService({
+                            sigthingDate: this.sigthingDate,
+                            numberOfChicks: this.numberOfChicks,
+                            observerName: this.observerName,
+                            observerEmail: this.observerEmail,
+                            gezinEerderGemeld: this.gezinEerderGemeld,
+                            habitat: this.habitat,
+                            remarks: this.remarks,
+                            permission: this.permission,
+                            lat: vm.lat,
+                            lng: vm.lng,
+                            age: vm.age
+                        });
+
+                        if (sighting) {
+                            Upload.upload({
+                                url: '/api/sighting',
+                                method: 'POST',
+                                data: {sighting: sighting},
+                                file: file
+                            }).success(function () {
+                                $('form').hide();
+                                $('.entry-succesfull').show();
+                                vm.checkToPreventDoubleEntries = true;
+                            }).error(function (error) {
+                                $scope.error = error.message;
+                                $.notify({
+                                    message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
+                                    icon: 'glyphicon glyphicon-remove-sign'
+                                }, {
+                                    type: 'danger'
+                                });
+                                vm.checkToPreventDoubleEntries = true;
+                            })
+                        }
+                    } else {
+                        $scope.permissionError = 'Je moet de voorwaarden accepteren om uw waarneming in te sturen.';
+                        $.notify({
+                            message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
+                            icon: 'glyphicon glyphicon-remove-sign'
+                        }, {
+                            type: 'danger'
+                        });
+                        vm.checkToPreventDoubleEntries = true;
+                    }
+                } 
+            }
         };
 
         $('#permission').click(function() {
