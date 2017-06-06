@@ -3,8 +3,8 @@
 
     app.controller('sightingController', sightingController);
 
-    sightingController.$inject = ['uiGmapGoogleMapApi','$scope','$routeParams', '$location', '$timeout','sightingService','Upload'];
-    function sightingController(uiGmapGoogleMapApi,$scope,$routeParams, $location, $timeout,sightingService, Upload) {
+    sightingController.$inject = ['$scope','$routeParams', '$location', '$timeout','sightingService','Upload'];
+    function sightingController($scope,$routeParams, $location, $timeout,sightingService, Upload) {
         var vm = this;
 
         vm.age = '';
@@ -68,14 +68,12 @@
             vm.marker.setMap(maps);
         }
 
-        uiGmapGoogleMapApi.then(function(maps) {
-        });
-
         vm.selectAge = function(id) {
             $('.containerimage').removeClass('background');
             $('#ageSelect' + id).addClass('background');
             vm.age = id;
             vm.agerequired = false;
+            checkValuesStepTwo();
         };
 
         vm.checkToPreventDoubleEntries = true;
@@ -94,10 +92,6 @@
                     vm.checkToPreventDoubleEntries = true;
                 } else {
                     $scope.error = null;
-                    if (vm.marker) {
-                        vm.lat = vm.marker.getPosition().lat();
-                        vm.lng = vm.marker.getPosition().lng();
-                    }
                     if (this.permission === true) {
                         var sighting = new sightingService({
                             sigthingDate: this.sigthingDate,
@@ -108,8 +102,8 @@
                             habitat: this.habitat,
                             remarks: this.remarks,
                             permission: this.permission,
-                            lat: vm.lat,
-                            lng: vm.lng,
+                            lat: $('#lat').val(),
+                            lng: $('#lng').val(),
                             age: vm.age
                         });
 
@@ -148,11 +142,64 @@
             }
         };
 
+        $('#stepTwo').click(function() {
+            goToStepTwo();
+        });
+
+        $('#stepThree').click(function() {
+            goToStepThree();
+        });
+
+        $('#stepFour').click(function() {
+            goToStepFour();
+        });
+
+        $('#stepFive').click(function() {
+            goToStepFive();
+        });
+
+        $('#datepicker-sightingDate').change(function() {
+            checkValuesStepOne();
+        });
+
+        $('#numberOfChicks').change(function() {
+            checkValuesStepOne();
+        });
+
+        $('#lat').change(function() {
+            checkValuesStepThree();
+        });
+
+        $('#remarks').val() && $('#habitat').val() && $('#gezinEerderGemeld').val() && $('.fileinput').val()
+
+        $('#remarks').change(function() {
+            checkValuesStepFour();
+        });
+
+        $('#habitat').change(function() {
+            checkValuesStepFour();
+        });
+
+        $('#gezinEerderGemeld').change(function() {
+            checkValuesStepFour();
+        });
+
+        $('.fileinput').change(function() {
+            checkValuesStepFour();
+        });
+
+        $('#permission').change(function() {
+            checkValuesStepFive();
+        });
+
         $('#permission').click(function() {
             $scope.permissionError = null;
         });
 
         $('.entry-succesfull').hide();
+        $('.stepThree').hide();
+
+        var Api = 'AIzaSyDjY3BL2CD15WKp6pBEUBUEf-sBtlN5768';
 
         function checkFileType(file) {
             if (file.type.match('image.*')) {
@@ -161,5 +208,129 @@
                 return false
             }
         }
+
+        var step = 1;
+
+        function goToStepTwo() {
+            if(step > 1) {
+
+            } else {
+                step = 2;
+                hideInput('.stepOne');
+                showInput('.stepTwo');
+                addActiveClass('#stepTwo');
+                stepSucceeded('#stepOne');
+            }
+        }
+
+        function goToStepThree() {
+            if(step > 2) {
+
+            } else {
+                step = 3;
+                hideInput('.stepTwo');
+                $('.stepThree').show();
+                google.maps.event.trigger(map, 'resize');
+                addActiveClass('#stepThree');
+                stepSucceeded('#stepTwo');
+            }
+        }
+
+        function goToStepFour() {
+            if(step > 3) {
+
+            } else {
+                step = 4;
+                hideInput('.stepThree');
+                showInput('.stepFour');
+                addActiveClass('#stepFour');
+                stepSucceeded('#stepThree');
+            }
+        }
+
+        function goToStepFive() {
+            if(step > 4) {
+
+            } else {
+                step = 5;
+                hideInput('.stepThree');
+                hideInput('.stepFour');
+                showInput('.stepFive');
+                addActiveClass('#stepFive');
+                stepSucceeded('#stepFour');
+                stepSucceeded('#stepThree');
+            }
+        }
     }
 })();
+
+function enableButton(name) {
+    $(name).removeClass('disabled');
+}
+
+function disableButton(name) {
+    $(name).addClass('disabled');
+}
+
+function hideInput(name) {
+    $(name).addClass('hidden');
+}
+
+function showInput(name) {
+    $(name).removeClass('hidden');
+}
+
+function stepSucceeded(step) {
+    $(step).addClass('list-group-item-success')
+}
+
+function addActiveClass(step) {
+    $('.list-group').find('button').removeClass('active');
+    $(step).addClass('active');
+}
+
+function addCheckbox(step) {
+    $(step).find('.badge').text('').append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+}
+
+function removeChechbox(step, number) {
+    $(step).find('.badge').text(number).find('.glyphicon').remove();
+}
+
+function checkValuesStepOne() {
+    if($('#numberOfChicks').val() && $('#datepicker-sightingDate').val()) {
+        enableButton('#stepTwo');
+        enableButton('#next');
+        addCheckbox('#stepOne');
+    } else {
+        disableButton('#stepTwo');
+        disableButton('#next');
+        removeChechbox('#stepOne', '1')
+    }
+}
+
+function checkValuesStepTwo() {
+    enableButton('#stepThree');
+    addCheckbox('#stepTwo');
+}
+
+function checkValuesStepFour() {
+    if($('#remarks').val() && $('#habitat').val() && $('#gezinEerderGemeld').val() && $('.fileinput').val()) {
+        addCheckbox('#stepFour');
+    } else {
+        removeChechbox('#stepFour', '4');
+    }
+}
+
+function checkValuesStepFive() {
+    if($('#permission').val()) {
+        enableButton('#stepFive');
+        addCheckbox('#stepFour');
+        $('#next').addClass('hidden');
+        $('#send').removeClass('hidden');
+    } else {
+        removeChechbox('#stepFive', '5')
+        $('#next').removeClass('hidden');
+        $('#send').addClass('hidden');
+    }
+}

@@ -2,11 +2,6 @@ html, body, h1, #maincontainer {
     font-family: 'Open Sans', sans-serif !important;
 }
 
-#maincontainer {
-    width: 700px;
-    padding: 5px;
-}
-
 #maincontainer h1 {
     font-size: 22px;
     margin-right: 20px;
@@ -21,10 +16,6 @@ html, body, h1, #maincontainer {
     float: left;
     margin-top: 30px;
     margin-bottom: 20px;
-}
-
-#maincontainer form {
-    width: 500px;
 }
 
 #maincontainer form label {
@@ -161,4 +152,13 @@ input[type=file] {
 
 #maincontainer .entry-succesfull a {
     float: none;
+}
+
+.padding-right {
+    padding-right: 15px;
+}
+
+#map {
+    width: 100%;
+    height: 300px;
 }
