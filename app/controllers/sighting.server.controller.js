@@ -74,7 +74,7 @@ exports.create = function(req, res) {
 };
 
 exports.list = function(req, res) {
-    Sighting.find().sort('-sigthingDate').exec(function(err, sightings) {
+    Sighting.find().limit(50).sort('-sigthingDate').exec(function(err, sightings) {
         console.log(sightings);
         if (err) {
             return res.status(400).send({
