@@ -1,0 +1,13 @@
+{
+    "sigthingDate": "2017-12-24 00:00:00.000Z",
+    "numberOfChicks": "2",
+    "observerName": "Niek",
+    "observerEmail": "test@test.com",
+    "gezinEerderGemeld": false,
+    "habitat": "natuur",
+    "remarks": "test",
+    "permission": true,
+    "lat": "51.809656204872454",
+    "lng": "4.901576042175293",
+    "age": "1"
+}

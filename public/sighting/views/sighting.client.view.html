@@ -1,167 +1,169 @@
-<div id="maincontainer" data-ng-controller="sightingController as ic">
-    <h1 class="text-center"><strong>{{ic.title}}</strong></h1><h2 class="help-block text-center">{{ic.waarneming}}</h1>
-    <p class="text-center">{{ic.letOp}}</p>
-    <form class="form-inline" name="myForm" novalidate>
-        <div class="form-group">
-            <label>Datum:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstDatum}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <input id="datepicker-sightingDate" type="text" class="form-control"
-                data-ng-model="sigthingDate" maxlength="10"
-                name="date" required>
-            <i ng-if="myForm.date.$error.required" id="daterequired">*verplicht</i>
+<div id="maincontainer" data-ng-controller="sightingController as ic" ng-class="{'scroll-bar': ic.noDuckSeason}">
+    <div class="no-duck-season" ng-if="!ic.noDuckSeason">
+        <div class="no-duck-season-message-container">
+            <h1>
+                Op dit moment is het niet mogelijk om uw waarneming in te voeren. Vanaf het begin van de lente is dit weer mogelijk.
+            </h1>
         </div>
-        <div class="form-group">
-            <label>Aantal kuikens:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstAantalKuikens}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <input type="text" class="form-control" maxlength="2"
-                data-ng-model="numberOfChicks"
-                id="numberOfChicks"
-                name="numberOfChicks" required>
-            <i ng-if="myForm.numberOfChicks.$error.required">*verplicht</i>
-        </div>
-        <div class="form-group">
-            <label>Uw naam:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstNaam}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <input type="text" class="form-control" data-ng-model="observerName" id="observerName" maxlength="100">
-        </div>
-        <div class="form-group">
-            <label>Uw emailadres:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstEmailadres}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <input type="text" class="form-control" data-ng-model="observerEmail" id="observerEmail" maxlength="100">
-        </div>
-        <div class="form-group">
-            <label>Gezin eerder gemeld?</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstGezin}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <input type="checkbox" data-ng-model="gezinEerderGemeld" id="gezinEerderGemeld">
-        </div>
-        <div class="form-group">
-            <label>Habitat:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstHabitat}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <select class="form-control" name="habitat" data-ng-model="habitat" id="habitat">
-                <option value="bebouwd">Bebouwd (stedelijk) gebied</option>
-                <option value="agrarisch">Agrarisch gebied</option>
-                <option value="natuur">Natuurgebied</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Opmerkingen:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstBijzonderheden}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <input type="text" class="form-control" data-ng-model="remarks" id="remarks" maxlength="4000">
-        </div>
-        <div class="form-group">
-            <label class="floatleft">Foto:</label>
-            <a popover-placement="top" uib-popover={{ic.helpTekstFoto}}>
-                <img class="information_img" src="img/information.png"/>
-            </a>
-            <input type="file" ngf-select class="fileinput"
-               ng-model="picFile" name="file"
-               accept="image/*" ngf-max-size="2MB" required
-               ngf-model-invalid="errorFile">
-        </div>
-        <i class="errortext" ng-show="myForm.file.$error.maxSize">Uw bestand ({{errorFile.size / 1000000|number:1}}MB) is
-            te groot (>2MB).</i>
-        </br>
-        <div class="form-group">
-        <label>Leeftijd:</label>
-        <a popover-placement="top" uib-popover={{ic.helpTekstLeeftijd}}>
-            <img class="information_img" src="img/information.png"/>
-        </a>
-        <i ng-if="ic.agerequired">*verplicht</i>
-        </div>
-        <div class="subcontainer">
-            <div id="ageSelect1" class="containerimage">
-                <p>0-1 week</p>
-                <img src="img/0-1weken.png" ng-click="ic.selectAge(1)">
-            </div>
-            <div id="ageSelect2" class="containerimage">
-                <p>1-2 weken</p>
-                <img src="img/1-2weken.png" ng-click="ic.selectAge(2)">
-            </div>
-            <div id="ageSelect3" class="containerimage">
-                <p>2-3 weken</p>
-                <img src="img/2-3weken.png" ng-click="ic.selectAge(3)">
-            </div>
-            <div id="ageSelect4" class="containerimage">
-                <p>3-4 weken</p>
-                <img src="img/3-4weken.png" ng-click="ic.selectAge(4)">
-            </div>
-        </div>
-        <div class="subcontainer">
-            <div id="ageSelect5" class="containerimage">
-                <p>4-5 week</p>
-                <img src="img/4-5weken.png" ng-click="ic.selectAge(5)">
-            </div>
-            <div id="ageSelect6" class="containerimage">
-                <p>5-6 weken</p>
-                <img src="img/5-6weken.png" ng-click="ic.selectAge(6)">
-            </div>
-            <div id="ageSelect7" class="containerimage">
-                <p>6-7 weken</p>
-                <img src="img/6-7weken.png" ng-click="ic.selectAge(7)">
-            </div>
-            <div id="ageSelect8" class="containerimage">
-                <p>>7 weken</p>
-                <img src="img/7+weken.png" ng-click="ic.selectAge(8)">
-            </div>
-        </div>
-        <div class="form-group">
-        <label>Locatie:</label>
-        <a popover-placement="bottom" uib-popover={{ic.helpTekstLocatie}}>
-            <img class="information_img" src="img/information.png"/>
-        </a>
-        <i id="locationRequired">*verplicht</i>
-        </div>
-        <ui-gmap-google-map center='map.center'
-                            zoom='map.zoom'
-                            events='map.events'
-                            dragging='false'
-                            options='options'>
-        </ui-gmap-google-map>
-
-        <div class="form-group">
-            <div data-ng-show="permissionError" class="errortext">
-                <strong data-ng-bind="permissionError"></strong>
-            </div>
-            <div data-ng-show="error" class="errortext">
-                <strong data-ng-bind="error"></strong>
-            </div>
-            <label></label>
-            <input  type="checkbox" data-ng-model="permission" id="permission">Ik ga akkoord met de <a class="voorwaarden" href="/#!/voorwaarden" target="_blank">voorwaarden</a>
-            <label></label>
-            <button ng-disabled="false" ng-click="create(picFile)">Versturen</button>
-        </div>
-    </form>
-    <div class="entry-succesfull">
-        <h1>Waarneming succesvol ingevoerd.</h1>
-        <p>Klik <a href="javascript:reloadPage()">hier</a> om nog een waarneming in te voeren.</p>
     </div>
+    <h1 class="text-center">
+        <strong>{{ic.title}}</strong>
+    </h1>
+    <h2 class="help-block text-center">{{ic.waarneming}}</h1>
+        <p class="text-center">{{ic.letOp}}</p>
+        <form class="form-inline" name="myForm" novalidate>
+            <div class="form-group">
+                <label>Datum:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstDatum}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <input id="datepicker-sightingDate" type="text" class="form-control" data-ng-model="sigthingDate" maxlength="10" name="date"
+                    required>
+                <i ng-if="myForm.date.$error.required" id="daterequired">*verplicht</i>
+            </div>
+            <div class="form-group">
+                <label>Aantal kuikens:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstAantalKuikens}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <input type="text" class="form-control" maxlength="2" data-ng-model="numberOfChicks" id="numberOfChicks" name="numberOfChicks"
+                    required>
+                <i ng-if="myForm.numberOfChicks.$error.required">*verplicht</i>
+            </div>
+            <div class="form-group">
+                <label>Uw naam:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstNaam}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <input type="text" class="form-control" data-ng-model="observerName" id="observerName" maxlength="100">
+            </div>
+            <div class="form-group">
+                <label>Uw emailadres:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstEmailadres}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <input type="text" class="form-control" data-ng-model="observerEmail" id="observerEmail" maxlength="100">
+            </div>
+            <div class="form-group">
+                <label>Gezin eerder gemeld?</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstGezin}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <input type="checkbox" data-ng-model="gezinEerderGemeld" id="gezinEerderGemeld">
+            </div>
+            <div class="form-group">
+                <label>Habitat:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstHabitat}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <select class="form-control" name="habitat" data-ng-model="habitat" id="habitat">
+                    <option value="bebouwd">Bebouwd (stedelijk) gebied</option>
+                    <option value="agrarisch">Agrarisch gebied</option>
+                    <option value="natuur">Natuurgebied</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Opmerkingen:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstBijzonderheden}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <input type="text" class="form-control" data-ng-model="remarks" id="remarks" maxlength="4000">
+            </div>
+            <div class="form-group">
+                <label class="floatleft">Foto:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstFoto}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <input type="file" ngf-select class="fileinput" ng-model="picFile" name="file" accept="image/*" ngf-max-size="2MB" required
+                    ngf-model-invalid="errorFile">
+            </div>
+            <i class="errortext" ng-show="myForm.file.$error.maxSize">Uw bestand ({{errorFile.size / 1000000|number:1}}MB) is te groot (>2MB).</i>
+            </br>
+            <div class="form-group">
+                <label>Leeftijd:</label>
+                <a popover-placement="top" uib-popover={{ic.helpTekstLeeftijd}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <i ng-if="ic.agerequired">*verplicht</i>
+            </div>
+            <div class="subcontainer">
+                <div id="ageSelect1" class="containerimage">
+                    <p>0-1 week</p>
+                    <img src="img/0-1weken.png" ng-click="ic.selectAge(1)">
+                </div>
+                <div id="ageSelect2" class="containerimage">
+                    <p>1-2 weken</p>
+                    <img src="img/1-2weken.png" ng-click="ic.selectAge(2)">
+                </div>
+                <div id="ageSelect3" class="containerimage">
+                    <p>2-3 weken</p>
+                    <img src="img/2-3weken.png" ng-click="ic.selectAge(3)">
+                </div>
+                <div id="ageSelect4" class="containerimage">
+                    <p>3-4 weken</p>
+                    <img src="img/3-4weken.png" ng-click="ic.selectAge(4)">
+                </div>
+            </div>
+            <div class="subcontainer">
+                <div id="ageSelect5" class="containerimage">
+                    <p>4-5 week</p>
+                    <img src="img/4-5weken.png" ng-click="ic.selectAge(5)">
+                </div>
+                <div id="ageSelect6" class="containerimage">
+                    <p>5-6 weken</p>
+                    <img src="img/5-6weken.png" ng-click="ic.selectAge(6)">
+                </div>
+                <div id="ageSelect7" class="containerimage">
+                    <p>6-7 weken</p>
+                    <img src="img/6-7weken.png" ng-click="ic.selectAge(7)">
+                </div>
+                <div id="ageSelect8" class="containerimage">
+                    <p>>7 weken</p>
+                    <img src="img/7+weken.png" ng-click="ic.selectAge(8)">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Locatie:</label>
+                <a popover-placement="bottom" uib-popover={{ic.helpTekstLocatie}}>
+                    <img class="information_img" src="img/information.png" />
+                </a>
+                <i id="locationRequired">*verplicht</i>
+            </div>
+            <ui-gmap-google-map ng-if="ic.noDuckSeason" center='map.center' zoom='map.zoom' events='map.events' dragging='false' options='options'>
+            </ui-gmap-google-map>
+
+            <div class="form-group">
+                <div data-ng-show="permissionError" class="errortext">
+                    <strong data-ng-bind="permissionError"></strong>
+                </div>
+                <div data-ng-show="error" class="errortext">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <label></label>
+                <input type="checkbox" data-ng-model="permission" id="permission">Ik ga akkoord met de
+                <a class="voorwaarden" href="/#!/voorwaarden" target="_blank">voorwaarden</a>
+                <label></label>
+                <button ng-disabled="false" ng-click="create(picFile)">Versturen</button>
+            </div>
+        </form>
+        <div class="entry-succesfull">
+            <h1>Waarneming succesvol ingevoerd.</h1>
+            <p>Klik
+                <a href="javascript:reloadPage()">hier</a> om nog een waarneming in te voeren.</p>
+        </div>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('[data-toggle="popover"]').popover();
         $('form input#datepicker-sightingDate').datepicker({
             format: "yyyy-mm-dd",
             todayBtn: "linked",
             autoclose: true
-        }).on('changeDate', function(e) {
+        }).on('changeDate', function (e) {
             $('form i#daterequired').hide();
         });
     });
     function reloadPage() {
-            window.location.reload();
-        }
+        window.location.reload();
+    }
 </script>

@@ -18,7 +18,6 @@ var getErrorMessage = function(err) {
 
 exports.create = function(req, res) {
     console.log(req.body);
-    console.log(req.files.file);
     var sighting = new Sighting(req.body.sighting);
     console.log('log: '+ sighting.waarnemingId);
     sighting.save(function(err) {
@@ -28,7 +27,7 @@ exports.create = function(req, res) {
                 message: getErrorMessage(err)
             });
         } else {
-            if(req.files.file){   // If the Image exists
+            if(req.files && req.files.file){   // If the Image exists
                 var file = req.files.file;
                 var uploadDate = new Date().toISOString();
                 uploadDate = uploadDate.replace('.','');

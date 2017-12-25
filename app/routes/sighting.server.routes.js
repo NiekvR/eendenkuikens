@@ -1,4 +1,5 @@
 var users = require('../../app/controllers/users.server.controller'),
+    season = require('../../app/controllers/season.server.controller'),
     sighting = require('../../app/controllers/sighting.server.controller'),
     multipart = require('connect-multiparty'),
     multipartMiddleware = multipart();
@@ -15,7 +16,7 @@ module.exports = function(app) {
 
     app.route('/api/sighting')
         .get(users.requiresLogin, sighting.list)
-        .post(multipartMiddleware,sighting.create);
+        .post(season.inSeason, multipartMiddleware, sighting.create);
 
     app.route('/api/sighting/:sightingId')
         .get(users.requiresLogin, sighting.read)

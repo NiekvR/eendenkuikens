@@ -1,10 +1,12 @@
-html, body, h1, #maincontainer {
+html, body, #maincontainer, section {
     font-family: 'Open Sans', sans-serif !important;
+    height: 100%;
 }
 
 #maincontainer {
     width: 700px;
     padding: 5px;
+    overflow: hidden;
 }
 
 #maincontainer h1 {
@@ -161,4 +163,31 @@ input[type=file] {
 
 #maincontainer .entry-succesfull a {
     float: none;
+}
+
+#maincontainer.scroll-bar {
+    overflow: auto;
+}
+
+.no-duck-season {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.no-duck-season .no-duck-season-message-container {
+    position: absolute;
+    top: 5%;
+    left: 25%;
+    right: 25%;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.no-duck-season .no-duck-season-message-container h1 {
+    text-align: center;
+    margin: 0;
 }

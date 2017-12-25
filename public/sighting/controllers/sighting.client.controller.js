@@ -1,10 +1,10 @@
-(function() {
+(function () {
     var app = angular.module('sighting');
 
     app.controller('sightingController', sightingController);
 
-    sightingController.$inject = ['uiGmapGoogleMapApi','$scope','$routeParams', '$location', '$timeout','sightingService','Upload'];
-    function sightingController(uiGmapGoogleMapApi,$scope,$routeParams, $location, $timeout,sightingService, Upload) {
+    sightingController.$inject = ['uiGmapGoogleMapApi', '$scope', '$routeParams', '$location', '$timeout', 'sightingService', 'Upload', '$http'];
+    function sightingController(uiGmapGoogleMapApi, $scope, $routeParams, $location, $timeout, sightingService, Upload, $http) {
         var vm = this;
 
         vm.age = '';
@@ -46,7 +46,7 @@
         vm.helpTekstHabitat = 'Selecteer hier de omgeving waarin het eendengezin verblijft.';
 
         $scope.map = {
-            center: {latitude: 52.5, longitude: 5.5},
+            center: { latitude: 52.5, longitude: 5.5 },
             zoom: 6,
             events: {
                 click: function (maps, eventName, args) {
@@ -59,7 +59,7 @@
         vm.marker = null;
 
         function placeMarker(location, maps) {
-            if(vm.marker === null) {
+            if (vm.marker === null) {
                 vm.marker = new google.maps.Marker({
                     position: location
                 });
@@ -68,10 +68,10 @@
             vm.marker.setMap(maps);
         }
 
-        uiGmapGoogleMapApi.then(function(maps) {
+        uiGmapGoogleMapApi.then(function (maps) {
         });
 
-        vm.selectAge = function(id) {
+        vm.selectAge = function (id) {
             $('.containerimage').removeClass('background');
             $('#ageSelect' + id).addClass('background');
             vm.age = id;
@@ -80,17 +80,17 @@
 
         vm.checkToPreventDoubleEntries = true;
 
-        $scope.create = function(file) {
-            if(vm.checkToPreventDoubleEntries) {
+        $scope.create = function (file) {
+            if (vm.checkToPreventDoubleEntries) {
                 vm.checkToPreventDoubleEntries = false;
-                if(file && !checkFileType(file)) {
+                if (file && !checkFileType(file)) {
                     $scope.error = 'Het bestand dat u probeerd te uploaden voldoet niet aan de eisen. U kan alleen images uploaden.';
                     $.notify({
                         message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
                         icon: 'glyphicon glyphicon-remove-sign'
                     }, {
-                        type: 'danger'
-                    });
+                            type: 'danger'
+                        });
                     vm.checkToPreventDoubleEntries = true;
                 } else {
                     $scope.error = null;
@@ -117,7 +117,7 @@
                             Upload.upload({
                                 url: '/api/sighting',
                                 method: 'POST',
-                                data: {sighting: sighting},
+                                data: { sighting: sighting },
                                 file: file
                             }).success(function () {
                                 $('form').hide();
@@ -129,8 +129,8 @@
                                     message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
                                     icon: 'glyphicon glyphicon-remove-sign'
                                 }, {
-                                    type: 'danger'
-                                });
+                                        type: 'danger'
+                                    });
                                 vm.checkToPreventDoubleEntries = true;
                             })
                         }
@@ -140,15 +140,15 @@
                             message: 'Het versturen van je waarneming is niet gelukt. Scroll naar beneden om te zien waarom.',
                             icon: 'glyphicon glyphicon-remove-sign'
                         }, {
-                            type: 'danger'
-                        });
+                                type: 'danger'
+                            });
                         vm.checkToPreventDoubleEntries = true;
                     }
-                } 
+                }
             }
         };
 
-        $('#permission').click(function() {
+        $('#permission').click(function () {
             $scope.permissionError = null;
         });
 
@@ -161,5 +161,15 @@
                 return false
             }
         }
+
+        $http({
+            method: 'GET',
+            url: '/api/season'
+        }).then(function successCallback(response) {
+            vm.noDuckSeason = response.data[0].inSeason;
+        }, function errorCallback(response) {
+            console.log(response)
+        });
+
     }
 })();
