@@ -1,4 +1,7 @@
-FROM node:6-alpine
+FROM mhart/alpine-node
+RUN apt-get update && apt-get -y install sudo
+RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+USER docker
 ENV NODE_ENV production
 WORKDIR /usr/src/app
 COPY ["package.json", "npm-shrinkwrap.json*", "./"]
