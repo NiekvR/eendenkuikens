@@ -191,3 +191,7 @@ input[type=file] {
     text-align: center;
     margin: 0;
 }
+
+.float-right {
+    float: right;
+}
