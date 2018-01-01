@@ -9,8 +9,8 @@ var mongoose = require('./config/mongoose'),
 var db = mongoose();
 var app = express();
 var passport = passports();
-var ip = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var ip = process.env.IP || 'localhost';
+var port = process.env.PORT || 3000;
 app.listen(port, ip);
 module.exports = app;
 
