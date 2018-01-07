@@ -19,7 +19,7 @@ exports.inSeason = function (req, res, next) {
             });
         } else {
             console.log(season);
-            if (season.inSeason) {
+            if (season[0].inSeason) {
                 next()
             } else {
                 return res.status(405).send({
