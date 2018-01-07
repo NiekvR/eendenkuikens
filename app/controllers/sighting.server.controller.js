@@ -59,7 +59,7 @@ exports.create = function(req, res) {
         }
         console.log('Upload complete for observation: ' + sighting._id);
         console.log('waarnemingId: ' + sighting.waarnemingIdCount);
-        sighting.waarnemingId = 'EK' + sighting.waarnemingIdCount;
+        sighting.waarnemingId = 'EK-2018-' + sighting.waarnemingIdCount;
         sighting.save(function(err) {
                         if(err) {
                             return res.status(400).send({
