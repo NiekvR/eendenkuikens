@@ -31,7 +31,7 @@
 
     app.config(function(uiGmapGoogleMapApiProvider) {
         uiGmapGoogleMapApiProvider.configure({
-            //key: 'AIzaSyBg4RWuwOAF5O5FAQx7uunZx7GqrHxBs2s',
+            key: 'AIzaSyC5eDItm0yolchF4-WqFd_9uZ_PNcjw0VQ',
             v: '3.22', //defaults to latest 3.X anyhow
             libraries: 'weather,geometry,visualization'
         });
