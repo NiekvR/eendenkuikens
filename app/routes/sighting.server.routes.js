@@ -2,6 +2,7 @@ var users = require('../../app/controllers/users.server.controller'),
     season = require('../../app/controllers/season.server.controller'),
     sighting = require('../../app/controllers/sighting.server.controller'),
     multipart = require('connect-multiparty'),
+    cors = require('cors'),
     multipartMiddleware = multipart();
 
 module.exports = function(app) {
@@ -16,7 +17,6 @@ module.exports = function(app) {
 
     app.route('/api/sighting')
         .get(users.requiresLogin, sighting.list)
-        .post(season.inSeason, multipartMiddleware, sighting.create);
 
     app.route('/api/sighting/:sightingId')
         .get(users.requiresLogin, sighting.read)
@@ -26,4 +26,9 @@ module.exports = function(app) {
     app.route('/zipdownload').get(sighting.writeZip);
 
     app.param('sightingId', sighting.sightingByID);
+
+    app.use(cors());
+
+    app.route('/api/sighting')
+        .post(season.inSeason, multipartMiddleware, sighting.create);
 };

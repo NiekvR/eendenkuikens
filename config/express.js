@@ -12,7 +12,7 @@ var config = require('./config'),
     multipart = require('connect-multiparty'),
     multipartMiddleware = multipart();
 
-module.exports = function() {
+module.exports = function () {
     var app = express();
 
     if (process.env.NODE_ENV === 'development') {
@@ -22,9 +22,10 @@ module.exports = function() {
     }
 
     app.use(bodyParser.urlencoded({
+        limit: '50mb',
         extended: true
     }));
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({limit: '50mb'}));
     app.use(methodOverride());
 
     app.use(session({

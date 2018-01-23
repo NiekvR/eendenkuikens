@@ -4,9 +4,10 @@ var mongoose = require('mongoose'),
     path = require('path'),
     json2csv = require('json2csv'),
     archiver = require('archiver'),
+    base64Img = require('base64-img'),
     mv = require('mv');
 
-var getErrorMessage = function(err) {
+var getErrorMessage = function (err) {
     if (err.errors) {
         for (var errName in err.errors) {
             if (err.errors[errName].message) return err.errors[errName].message;
@@ -16,36 +17,60 @@ var getErrorMessage = function(err) {
     }
 };
 
-exports.create = function(req, res) {
-    console.log(req.body);
+exports.create = function (req, res) {
     var sighting = new Sighting(req.body.sighting);
-    console.log('log: '+ sighting.waarnemingId);
-    sighting.save(function(err) {
+    sighting.save(function (err) {
         if (err) {
             console.log(err);
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         } else {
-            if(req.files && req.files.file){   // If the Image exists
+            if (sighting.photo) {
+                var uploadDate = new Date().toISOString();
+                uploadDate = uploadDate.replace('.', '');
+                uploadDate = uploadDate.replace(':', '');
+                uploadDate = uploadDate.replace(':', '');
+                var filename = uploadDate + 'EK-2018-' + sighting.waarnemingIdCount;
+                var targetPath = path.join(__dirname, '../../public/img/uploads/');
+                var savePath = 'img/uploads/' + filename + '.jpg';
+                var base64Data = sighting.photo.replace(/^data:image\/png;base64,/, "");
+                base64Img.img(sighting.photo, targetPath, filename, function (err, filepath) {
+                    if (err) {
+                        console.log(err);
+                    } 
+                    if (filepath) {
+                        sighting.photo = savePath;
+                        sighting.save(function(err) {
+                            if(err) {
+                                return res.status(400).send({
+                                    message: getErrorMessage(err)
+                                });
+                            } else {
+                                console.log('Upload complete for file: ' + filepath);
+                            }
+                        })
+                    }
+                });
+            } else if (req.files && req.files.file) {   // If the Image exists
                 var file = req.files.file;
                 var uploadDate = new Date().toISOString();
-                uploadDate = uploadDate.replace('.','');
-                uploadDate = uploadDate.replace(':','');
-                uploadDate = uploadDate.replace(':','');
+                uploadDate = uploadDate.replace('.', '');
+                uploadDate = uploadDate.replace(':', '');
+                uploadDate = uploadDate.replace(':', '');
                 var tempPath = file.path;
 
-                var targetPath = path.join(__dirname,'../../public/img/uploads/' + uploadDate + file.originalFilename);
+                var targetPath = path.join(__dirname, '../../public/img/uploads/' + uploadDate + file.originalFilename);
                 var savePath = 'img/uploads/' + uploadDate + file.originalFilename;
 
-                mv(tempPath, targetPath, function(err) {
-                    if(err) {
+                mv(tempPath, targetPath, function (err) {
+                    if (err) {
                         console.log(err);
                         throw err
                     } else {
                         sighting.photo = savePath;
-                        sighting.save(function(err) {
-                            if(err) {
+                        sighting.save(function (err) {
+                            if (err) {
                                 return res.status(400).send({
                                     message: getErrorMessage(err)
                                 });
@@ -60,20 +85,20 @@ exports.create = function(req, res) {
         console.log('Upload complete for observation: ' + sighting._id);
         console.log('waarnemingId: ' + sighting.waarnemingIdCount);
         sighting.waarnemingId = 'EK-2018-' + sighting.waarnemingIdCount;
-        sighting.save(function(err) {
-                        if(err) {
-                            return res.status(400).send({
-                                message: getErrorMessage(err)
-                            });
-                        }
-                    });
+        sighting.save(function (err) {
+            if (err) {
+                return res.status(400).send({
+                    message: getErrorMessage(err)
+                });
+            }
+        });
         console.log('waarnemingId: ' + sighting.waarnemingId);
         res.json(sighting);
     });
 };
 
-exports.list = function(req, res) {
-    Sighting.find().limit(50).sort('-sigthingDate').exec(function(err, sightings) {
+exports.list = function (req, res) {
+    Sighting.find().limit(50).sort('-sigthingDate').exec(function (err, sightings) {
         console.log(sightings);
         if (err) {
             return res.status(400).send({
@@ -87,15 +112,15 @@ exports.list = function(req, res) {
 
 var fields = ['sigthingDate', 'waarnemingId', 'numberOfChicks', 'observerName', 'observerEmail', 'gezinEerderGemeld', 'habitat', 'remarks', 'lat', 'lng', 'age', 'permission', 'photo'];
 
-exports.csv = function(req, res) {
-    Sighting.find().sort('-sigthingDate').exec(function(err, sightings) {
+exports.csv = function (req, res) {
+    Sighting.find().sort('-sigthingDate').exec(function (err, sightings) {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         }
         else {
-            json2csv({ data: sightings, fields: fields, del: ';' }, function(err, tsv) {
+            json2csv({ data: sightings, fields: fields, del: ';' }, function (err, tsv) {
                 if (err) {
                     return res.status(400).send({
                         message: getErrorMessage(err)
@@ -111,7 +136,7 @@ exports.csv = function(req, res) {
     });
 };
 
-exports.writeZip = function(req, res) {
+exports.writeZip = function (req, res) {
     var basedir = 'public/img/',
         dir = basedir + 'uploads/',
         zipName = 'jsd-photos.zip',
@@ -120,14 +145,14 @@ exports.writeZip = function(req, res) {
         output = fs.createWriteStream(basedir + zipName),
         archive = archiver('zip');
 
-    console.log('Filearray: '+fileArray);
+    console.log('Filearray: ' + fileArray);
 
-    archive.on('error', function(err) {
+    archive.on('error', function (err) {
         console.error(err);
-        res.status(500).send({error: err.message});
+        res.status(500).send({ error: err.message });
     });
 
-    output.on('close', function() {
+    output.on('close', function () {
         console.log('Archive wrote %d bytes', archive.pointer());
         return res.status(200).send(downloaddir).end();
     });
@@ -136,8 +161,8 @@ exports.writeZip = function(req, res) {
 
     archive.pipe(output);
 
-    fileArray.forEach(function(item){
-        if(item.name !== '.DS_Store') {
+    fileArray.forEach(function (item) {
+        if (item.name !== '.DS_Store') {
             var file = item.path + item.name;
             archive.append(fs.createReadStream(file), { name: item.name });
         }
@@ -148,7 +173,7 @@ exports.writeZip = function(req, res) {
     archive.finalize();
 };
 
-exports.deletefotos = function(req, res) {
+exports.deletefotos = function (req, res) {
     var basedir = 'public/img/',
         dir = basedir + 'uploads/',
         message = deleteDirectoryContent(dir);
@@ -159,32 +184,32 @@ exports.deletefotos = function(req, res) {
 
 function deleteDirectoryContent(dir) {
     var files = fs.readdirSync(dir);
-    files.forEach(function(file){
+    files.forEach(function (file) {
         console.log("Deleting file:" + file);
-        fs.unlink(dir+file, function(err) {
-            if(err) {
-                console.log("Error: " +err);
+        fs.unlink(dir + file, function (err) {
+            if (err) {
+                console.log("Error: " + err);
                 throw err
             }
         });
     });
     console.log("Deleting fotos completed");
-    return {status: 200, message: 'OK'};
+    return { status: 200, message: 'OK' };
 }
 
-function getDirectoryList(dir){
+function getDirectoryList(dir) {
     var fileArray = [],
         files = fs.readdirSync(dir);
-    files.forEach(function(file){
-        var obj = {name: file, path: dir};
+    files.forEach(function (file) {
+        var obj = { name: file, path: dir };
         fileArray.push(obj);
         console.log(obj)
     });
     return fileArray;
 };
 
-exports.sightingByID = function(req, res, next, id) {
-    Sighting.findById(id).exec(function(err, sighting) {
+exports.sightingByID = function (req, res, next, id) {
+    Sighting.findById(id).exec(function (err, sighting) {
         if (err) return next(err);
         if (!sighting) return next(new Error('Het is niet gelukt de volgende waarneming te laden: ' + id));
 
@@ -193,14 +218,14 @@ exports.sightingByID = function(req, res, next, id) {
     });
 };
 
-exports.read = function(req, res) {
+exports.read = function (req, res) {
     res.json(req.sighting);
 };
 
-exports.delete = function(req, res) {
+exports.delete = function (req, res) {
     var sighting = req.sighting;
 
-    sighting.remove(function(err) {
+    sighting.remove(function (err) {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)

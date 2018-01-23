@@ -17,10 +17,12 @@
   "license": "MIT",
   "dependencies": {
     "archiver": "^1.0.0",
+    "base64-img": "^1.0.3",
     "body-parser": "~1.8.0",
     "compression": "~1.0.11",
     "connect-flash": "~0.1.1",
     "connect-multiparty": "^2.0.0",
+    "cors": "^2.8.4",
     "ejs": "~1.0.0",
     "express": "latest",
     "express-session": "~1.7.6",
