@@ -33,6 +33,9 @@ var SightingSchema = Schema({
     gezinEerderGemeld: {
         type: Boolean
     },
+    gezinEerderGemeldWithId: {
+        type: String
+    },
     habitat: {
         type: String
     },
