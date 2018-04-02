@@ -7,6 +7,17 @@
     function sightingsController(Authentication,$http, $scope) {
         var vm = this;
 
+        vm.ages = {
+            "0": "0-1 week",
+            "1": "1-2 weken",
+            "2": "2-3 weken",
+            "3": "3-4 weken",
+            "4": "4-5 weken",
+            "5": "5-6 weken",
+            "6": "6-7 weken",
+            "7": ">7 weken"
+        }
+
         vm.title = 'Eendenkuikenproject';
 
         vm.sightings = '';

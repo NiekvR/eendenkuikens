@@ -34,6 +34,9 @@ exports.create = function (req, res) {
                 var filename = uploadDate + 'EK-2018-' + sighting.waarnemingIdCount;
                 var targetPath = path.join(__dirname, '../../public/img/uploads/');
                 var savePath = 'img/uploads/' + filename + '.jpg';
+                if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
+                    fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
+                }
                 var base64Data = sighting.photo.replace(/^data:image\/png;base64,/, "");
                 base64Img.img(sighting.photo, targetPath, filename, function (err, filepath) {
                     if (err) {
@@ -62,6 +65,10 @@ exports.create = function (req, res) {
 
                 var targetPath = path.join(__dirname, '../../public/img/uploads/' + uploadDate + file.originalFilename);
                 var savePath = 'img/uploads/' + uploadDate + file.originalFilename;
+                console.log(path.join(__dirname, '../../public/img/uploads/'));
+                if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
+                    fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
+                }
 
                 mv(tempPath, targetPath, function (err) {
                     if (err) {
