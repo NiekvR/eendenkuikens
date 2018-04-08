@@ -35,10 +35,10 @@
                 <td>{{sighting.observerName}}</td>
                 <td>{{sighting.observerEmail}}</td>
                 <td>{{sighting.gezinEerderGemeld}} {{sighting.gezinEerderGemeldWithId}}</td>
-                <td>{{sighting.habitat}}</td>
+                <td>{{sc.habitatTypes[sighting.habitat]}}</td>
                 <td>{{sighting.remarks}}</td>
                 <td>{{sighting.permission}}</td>
-                <td><div ng-if="sighting.photo"> <a href="{{sighting.photo}}"><img class="tumbnail_size" ng-src="{{sighting.photo}}"/></a></div>
+                <td><div ng-if="sighting.photo"><img class="tumbnail_size" ng-src="{{sighting.photo}}"/></div>
                 <div ng-if="!sighting.photo">Geen foto beschikbaar</div></td>
             </tr>
         </table>

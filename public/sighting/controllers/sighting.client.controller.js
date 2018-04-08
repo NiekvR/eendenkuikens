@@ -83,7 +83,7 @@
         $scope.create = function (file) {
             if (vm.checkToPreventDoubleEntries) {
                 vm.checkToPreventDoubleEntries = false;
-                if (file && !checkFileType(file)) {
+                if (this.photo && !checkFileType(this.photo)) {
                     $scope.error = 'Het bestand dat u probeerd te uploaden voldoet niet aan de eisen. U kan alleen images uploaden.';
                     $.notify({
                         message: 'Het versturen van je waarneming is niet gelukt. Scroll naar boven om te zien waarom.',
@@ -99,6 +99,9 @@
                         vm.lng = vm.marker.getPosition().lng();
                     }
                     if (this.permission === true) {
+                        if(this.photo) {
+                            this.photo.base64 = "data:image/png;base64," + this.photo.base64
+                        }
                         var sighting = new sightingService({
                             sigthingDate: this.sigthingDate,
                             numberOfChicks: this.numberOfChicks,
@@ -110,15 +113,15 @@
                             permission: this.permission,
                             lat: vm.lat,
                             lng: vm.lng,
-                            age: vm.age
+                            age: vm.age,
+                            photo: this.photo.base64
                         });
 
                         if (sighting) {
                             Upload.upload({
                                 url: '/api/sighting',
                                 method: 'POST',
-                                data: { sighting: sighting },
-                                file: file
+                                data: { sighting: sighting }
                             }).success(function () {
                                 $('form').hide();
                                 $('.entry-succesfull').show();
@@ -155,7 +158,7 @@
         $('.entry-succesfull').hide();
 
         function checkFileType(file) {
-            if (file.type.match('image.*')) {
+            if (file.filetype.match('image.*')) {
                 return true
             } else {
                 return false

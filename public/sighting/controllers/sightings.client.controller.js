@@ -18,6 +18,15 @@
             "7": ">7 weken"
         }
 
+        vm.habitatTypes = {
+            "bsg": "bebouwd",
+            "bebouwd": "bebouwd",
+            "ag": "agrarisch",
+            "agrarisch": "agrarisch",
+            "nb": "natuur",
+            "natuur": "natuur"
+        }
+
         vm.title = 'Eendenkuikenproject';
 
         vm.sightings = '';
@@ -101,7 +110,6 @@
             url: '/api/sighting'
         }).then(function successCallback(response) {
             vm.sightings = response.data;
-            console.log(vm.sightings)
         }, function errorCallback(response) {
             console.log(response)
         });
