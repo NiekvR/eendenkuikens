@@ -114,7 +114,7 @@
                             lat: vm.lat,
                             lng: vm.lng,
                             age: vm.age,
-                            photo: this.photo.base64
+                            photo: this.photo ? this.photo.base64 : ''
                         });
 
                         if (sighting) {
