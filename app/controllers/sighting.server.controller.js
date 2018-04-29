@@ -77,6 +77,10 @@ exports.csv = function (req, res) {
 };
 
 exports.writeZip = function (req, res) {
+    if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
+        fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
+    }
+
     Sighting.find().sort('-sigthingDate').exec(function (err, sightings) {
         if (err) {
             return res.status(400).send({
@@ -95,9 +99,6 @@ exports.writeZip = function (req, res) {
                     var filename = uploadDate + '_EK-2018-' + sighting.waarnemingIdCount;
                     var targetPath = path.join(__dirname, '../../public/img/uploads/');
                     var savePath = targetPath + filename + '.png';
-                    if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
-                        fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
-                    }
 
                     fs.writeFile(savePath, base64Image, { encoding: 'base64' }, function (err) {
                         if (err) {

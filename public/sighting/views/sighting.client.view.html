@@ -74,11 +74,9 @@
                 <a popover-placement="top" uib-popover={{ic.helpTekstFoto}}>
                     <img class="information_img" src="img/information.png" />
                 </a>
-                <input type='file' name="file" data-ng-model="photo" base-sixty-four-input accept="image/*" maxsize="2000">
-                <!-- <input type="file" ngf-select class="fileinput" ng-model="picFile" name="file" accept="image/*" ngf-max-size="2MB" required
-                    ngf-model-invalid="errorFile"> -->
+                <input type='file' name="file" data-ng-model="photo" base-sixty-four-input accept="image/*" maxsize="1500">
             </div>
-            <i class="errortext" ng-show="myForm.file.$error.maxsize">Uw bestand ({{photo.filesize / 1000000|number:1}}MB) is te groot (>2MB).</i>
+            <i class="errortext" ng-show="myForm.file.$error.maxsize">Uw bestand ({{photo.filesize / 1000000|number:1}}MB) is te groot (>1.5MB).</i>
             </br>
             <div class="form-group">
                 <label>Leeftijd:</label>
