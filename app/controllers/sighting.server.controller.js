@@ -77,43 +77,55 @@ exports.csv = function (req, res) {
 };
 
 exports.writeZip = function (req, res) {
+    Sighting.count().exec(function(err, count) {
+        console.log(count);
+        console.log(count / 10);
+        var cycles = Math.ceil(count / 10); 
+        console.log(cycles);
+        for (i = 0; i < cycles; i++) { 
+            var skip = i * 10;
+            console.log("Wrtiting Images for Documents " + skip + " to " + (skip + 10));;
+            Sighting.find().skip(skip).limit(10).sort('-sigthingDate').exec(function (err, sightings) {
+                writeImages(sightings);
+            });
+        }
+    });
+    writeZipFile(res);
+    return { status: 200, message: 'OK' };
+}
+
+function writeImages(sightings) {
+    console.log("Start writing images")
     if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
         fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
     }
 
-    Sighting.find().sort('-sigthingDate').exec(function (err, sightings) {
-        if (err) {
-            return res.status(400).send({
-                message: getErrorMessage(err)
-            });
-        }
-        else {
-            sightings.forEach((sighting) => {
-                if (sighting.photo) {
-                    let base64Image = sighting.photo.split(';base64,').pop();
+    sightings.forEach((sighting) => {
+        if (sighting.photo) {
+            let base64Image = sighting.photo.split(';base64,').pop();
 
-                    var uploadDate = new Date().toISOString();
-                    uploadDate = uploadDate.replace('.', '');
-                    uploadDate = uploadDate.replace(':', '');
-                    uploadDate = uploadDate.replace(':', '');
-                    var filename = uploadDate + '_EK-2018-' + sighting.waarnemingIdCount;
-                    var targetPath = path.join(__dirname, '../../public/img/uploads/');
-                    var savePath = targetPath + filename + '.png';
+            var uploadDate = new Date().toISOString();
+            uploadDate = uploadDate.replace('.', '');
+            uploadDate = uploadDate.replace(':', '');
+            uploadDate = uploadDate.replace(':', '');
+            var filename = uploadDate + '_EK-2018-' + sighting.waarnemingIdCount;
+            var targetPath = path.join(__dirname, '../../public/img/uploads/');
+            var savePath = targetPath + filename + '.png';
 
-                    fs.writeFile(savePath, base64Image, { encoding: 'base64' }, function (err) {
-                        if (err) {
-                            console.log(err);
-                            return res.status(400).send({
-                                message: getErrorMessage(err)
-                            });
-                        }
+            fs.writeFile(savePath, base64Image, { encoding: 'base64' }, function (err) {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send({
+                        message: getErrorMessage(err)
                     });
                 }
             });
         }
+    console.log("END writing images")
     });
+}
 
-
+function writeZipFile(res) {
     var basedir = 'public/img/',
         dir = basedir + 'uploads/',
         zipName = 'jsd-photos.zip',
