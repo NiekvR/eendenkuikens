@@ -55,7 +55,7 @@ var fieldsQ = 'sigthingDate waarnemingId numberOfChicks observerName observerEma
 
 exports.csv = function (req, res) {
     console.log("Starting CSV export");
-    Sighting.find({}, fieldsQ).sort('-sigthingDate').exec(function (err, sightings) {
+    Sighting.find({}, fieldsQ, function (err, sightings) {
         if (err) {
             console.log(err)
             return res.status(400).send({
