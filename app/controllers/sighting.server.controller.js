@@ -54,13 +54,16 @@ var fields = ['sigthingDate', 'waarnemingId', 'numberOfChicks', 'observerName', 
 var fieldsQ = 'sigthingDate waarnemingId numberOfChicks observerName observerEmail gezinEerderGemeld gezinEerderGemeldWithId habitat remarks lat lng age permission';
 
 exports.csv = function (req, res) {
+    console.log("Starting CSV export");
     Sighting.find({}, fieldsQ).sort('-sigthingDate').exec(function (err, sightings) {
         if (err) {
+            console.log(err)
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
         }
         else {
+            console.log("JSON to CSV");
             json2csv({ data: sightings, fields: fields, del: ';' }, function (err, tsv) {
                 if (err) {
                     return res.status(400).send({

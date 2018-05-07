@@ -34,18 +34,29 @@
         vm.authentication = Authentication;
 
         vm.csv = function() {
-            $http({method: 'GET', url: '/api/csv'}).
-                success(function(data, status, headers, config) {
+            $http({method: 'GET', url: '/api/csv'})
+                .then(function successCallback(response) {
+                    vm.sightings = response.data;
                     var anchor = angular.element('<a/>');
                     anchor.attr({
-                        href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
+                        href: 'data:attachment/csv;charset=utf-8,' + encodeURI(response.data),
                         target: '_blank',
                         download: 'sightings.csv'
                     })[0].click();
-                }).
-                error(function(data, status, headers, config) {
+                }, function errorCallback(response) {
                     console.log(response)
                 });
+                // then(function(data, status, headers, config) {
+                //     var anchor = angular.element('<a/>');
+                //     anchor.attr({
+                //         href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
+                //         target: '_blank',
+                //         download: 'sightings.csv'
+                //     })[0].click();
+                // }).
+                // error(function(data, status, headers, config) {
+                //     console.log(response)
+                // });
         };
 
         vm.locationZipFile = null;
