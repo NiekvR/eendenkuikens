@@ -77,20 +77,10 @@ exports.csv = function (req, res) {
 };
 
 exports.writeZip = function (req, res) {
-    Sighting.count().exec(function(err, count) {
-        console.log(count);
-        console.log(count / 10);
-        var cycles = Math.ceil(count / 10); 
-        console.log(cycles);
-        for (i = 0; i < cycles; i++) { 
-            var skip = i * 10;
-            console.log("Wrtiting Images for Documents " + skip + " to " + (skip + 10));;
-            Sighting.find().skip(skip).limit(10).sort('-sigthingDate').exec(function (err, sightings) {
-                writeImages(sightings);
-            });
-        }
+    Sighting.find().sort('-sigthingDate').exec(function (err, sightings) {
+        writeImages(sightings);
+        writeZipFile(res);
     });
-    writeZipFile(res);
     return { status: 200, message: 'OK' };
 }
 
@@ -102,6 +92,7 @@ function writeImages(sightings) {
 
     sightings.forEach((sighting) => {
         if (sighting.photo) {
+            console.log("Creating photo for observation: " + sighting.waarnemingId)
             let base64Image = sighting.photo.split(';base64,').pop();
 
             var uploadDate = new Date().toISOString();
@@ -120,12 +111,15 @@ function writeImages(sightings) {
                     });
                 }
             });
+        } else {
+            console.log("No photo for observation: " + sighting.waarnemingId)
         }
     console.log("END writing images")
     });
 }
 
 function writeZipFile(res) {
+    console.log("Start writing Zip-file")
     var basedir = 'public/img/',
         dir = basedir + 'uploads/',
         zipName = 'jsd-photos.zip',
@@ -155,6 +149,7 @@ function writeZipFile(res) {
     });
 
     archive.finalize();
+    console.log("End writing Zip-file")
 };
 
 exports.deletefotos = function (req, res) {
