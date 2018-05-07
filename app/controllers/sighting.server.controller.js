@@ -51,9 +51,10 @@ exports.list = function (req, res) {
 };
 
 var fields = ['sigthingDate', 'waarnemingId', 'numberOfChicks', 'observerName', 'observerEmail', 'gezinEerderGemeld', 'gezinEerderGemeldWithId', 'habitat', 'remarks', 'lat', 'lng', 'age', 'permission'];
+var fieldsQ = 'sigthingDate waarnemingId numberOfChicks observerName observerEmail gezinEerderGemeld gezinEerderGemeldWithId habitat remarks lat lng age permission';
 
 exports.csv = function (req, res) {
-    Sighting.find().sort('-sigthingDate').exec(function (err, sightings) {
+    Sighting.find({}, fieldsQ).sort('-sigthingDate').exec(function (err, sightings) {
         if (err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
@@ -76,8 +77,9 @@ exports.csv = function (req, res) {
     });
 };
 
+
 exports.writeZip = function (req, res) {
-    Sighting.find().sort('-sigthingDate').exec(function (err, sightings) {
+    Sighting.find({}, function (err, sightings) {
         writeImages(sightings);
         writeZipFile(res);
     });
