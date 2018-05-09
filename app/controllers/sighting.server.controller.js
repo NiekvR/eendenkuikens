@@ -82,11 +82,16 @@ exports.csv = function (req, res) {
 
 
 exports.writeZip = function (req, res) {
-    Sighting.find({}, function (err, sightings) {
-        writeImages(sightings);
-        writeZipFile(res);
+    Sighting.find().skip(parseInt(req.query.skip)).limit(50).exec(function (err, sightings) {
+        if(sightings.length > 0) {
+            writeImages(sightings);
+            writeZipFile(res);
+        } else { 
+            return res.status(400).send({
+                message: 'No sightings found after sighting id: ' + req.query.skip
+            });
+        }
     });
-    return { status: 200, message: 'OK' };
 }
 
 function writeImages(sightings) {

@@ -9,6 +9,8 @@
         <a ng-show="sc.locationZipFile" target="_self" href="{{sc.locationZipFile}}">jsd-photos.zip</a>
         <button ng-click="sc.deleteFotos()">Delete photo's</button>
         <button class="float-right" ng-click="sc.setSeason()">{{sc.inSeasonAction}} seizoen</button>
+        Start sighting: <input ng-model="sc.startSighting"/>
+        End sighting: {{ sc.endSighting }}
         <table class="table table-hover" style="width:100%">
             <tr>
                 <th>ID</th>
