@@ -98,6 +98,8 @@ function writeImages(sightings) {
     console.log("Start writing images")
     if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
         fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
+    } else {
+       fs.emptyDirSync(path.join(__dirname, '../../public/img/uploads/'));
     }
 
     sightings.forEach((sighting) => {
