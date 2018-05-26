@@ -83,10 +83,10 @@ exports.csv = function (req, res) {
 
 exports.writeZip = function (req, res) {
     Sighting.find().skip(parseInt(req.query.skip)).limit(50).exec(function (err, sightings) {
-        if(sightings.length > 0) {
+        if (sightings.length > 0) {
             writeImages(sightings);
             writeZipFile(res);
-        } else { 
+        } else {
             return res.status(400).send({
                 message: 'No sightings found after sighting id: ' + req.query.skip
             });
@@ -99,7 +99,7 @@ function writeImages(sightings) {
     if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
         fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
     } else {
-       fs.emptyDirSync(path.join(__dirname, '../../public/img/uploads/'));
+        fs.emptyDirSync(path.join(__dirname, '../../public/img/uploads/'));
     }
 
     sightings.forEach((sighting) => {
@@ -126,7 +126,7 @@ function writeImages(sightings) {
         } else {
             console.log("No photo for observation: " + sighting.waarnemingId)
         }
-    console.log("END writing images")
+        console.log("END writing images")
     });
 }
 
@@ -140,27 +140,31 @@ function writeZipFile(res) {
         output = fs.createWriteStream(basedir + zipName),
         archive = archiver('zip');
 
-    archive.on('error', function (err) {
-        console.error(err);
-        res.status(500).send({ error: err.message });
-    });
+    if (fileArray.length > 0) {
+        archive.on('error', function (err) {
+            console.error(err);
+            res.status(500).send({ error: err.message });
+        });
 
-    output.on('close', function () {
-        return res.status(200).send(downloaddir).end();
-    });
+        output.on('close', function () {
+            return res.status(200).send(downloaddir).end();
+        });
 
-    res.attachment('myzip.zip');
+        res.attachment('myzip.zip');
 
-    archive.pipe(output);
+        archive.pipe(output);
 
-    fileArray.forEach(function (item) {
-        if (item.name !== '.DS_Store') {
-            var file = item.path + item.name;
-            archive.append(fs.createReadStream(file), { name: item.name });
-        }
-    });
+        fileArray.forEach(function (item) {
+            if (item.name !== '.DS_Store') {
+                var file = item.path + item.name;
+                archive.append(fs.createReadStream(file), { name: item.name });
+            }
+        });
 
-    archive.finalize();
+        archive.finalize();
+    } else {
+        res.status(400).send({ message: 'No images in sighting selection' });
+    }
     console.log("End writing Zip-file")
 };
 

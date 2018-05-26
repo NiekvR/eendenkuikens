@@ -1,0 +1,58 @@
+<div data-ng-controller="speciesController as sp">
+    <div ng-show="!sp.authentication.user">
+        <p>Je moet ingelogd zijn om deze pagina te bekijken</p>
+    </div>
+    <div ng-show="sp.authentication.user">
+        <a href="/signout">Signout</a>
+        <form class="form-inline" name="speciesForm" novalidate style="margin-bottom: 30px;">
+            <div class="form-group" style="width: auto; margin-right: 10px;">
+                <label>Name Dutch:</label>
+                <input id="nameNL" type="text" class="form-control" data-ng-model="sp.changeSpecies.nameNL" name="nameNL" required>
+            </div>
+            <div class="form-group" style="width: auto; margin-right: 10px;">
+                <label>Name English:</label>
+                <input id="nameEN" type="text" class="form-control" data-ng-model="sp.changeSpecies.nameEN" name="nameEN" required>
+            </div>
+            <div class="form-group" style="width: auto; margin-right: 10px;">
+                <label>Name Family Latin:</label>
+                <input id="familyLatin" type="text" class="form-control" data-ng-model="sp.changeSpecies.familyLatin" name="familyLatin"
+                    required>
+            </div>
+            <div class="form-group" style="width: auto; margin-right: 10px;">
+                <label>Name Species Latin:</label>
+                <input id="speciesLatin" type="text" class="form-control" data-ng-model="sp.changeSpecies.speciesLatin" name="speciesLatin"
+                    required>
+            </div>
+            <div class="form-group" style="width: auto; margin-right: 10px;">
+                <label>In Use:</label>
+                <input type="checkbox" data-ng-model="sp.changeSpecies.inUse" id="inUse">
+            </div>
+            <button ng-disabled="speciesForm.$invalid" ng-click="create(speciesForm)">Update species</button>
+        </form>
+        <table class="table table-hover" style="width:100%">
+            <tr>
+                <th>Name Dutch</th>
+                <th>Name English</th>
+                <th>Name Family Latin </th>
+                <th>Name Species Latin </th>
+                <th>InUse</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            <tr ng-repeat="species in sp.species">
+                <div ng-if="species.edit">
+                    <td>{{species.nameNL}}</td>
+                    <td>{{species.nameEN}}</td>
+                    <td>{{species.familyLatin}}</td>
+                    <td>{{species.speciesLatin}}</td>
+                    <td>{{species.inUse}}</td>
+                    <td>
+                        <button ng-click="sp.editSpecies(species)">Edit</button>
+                    </td>
+                    <td>
+                        <button ng-click="sp.deleteSpecies(species)">Delete</button>
+                    </td>
+                </div>
+            </tr>
+    </div>
+</div>

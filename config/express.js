@@ -47,6 +47,7 @@ module.exports = function () {
     require('../app/routes/users.server.routes.js')(app);
     require('../app/routes/sighting.server.routes.js')(app);
     require('../app/routes/season.server.routes.js')(app);
+    require('../app/routes/species.server.routes.js')(app);
 
     app.use(express.static('./public'));
 

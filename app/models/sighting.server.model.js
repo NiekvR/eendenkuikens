@@ -14,6 +14,9 @@ var SightingSchema = Schema({
     waarnemingIdCount: {
         type: Number
     },
+    species: {
+        type: String
+    },
     sigthingDate: {
         type: Date,
         required: 'De datum moet ingevuld zijn voordat de waarneming verstuurd kan worden.'

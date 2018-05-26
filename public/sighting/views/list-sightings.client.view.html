@@ -8,12 +8,15 @@
         <button ng-click="sc.writeZip()">Create zip</button>
         <a ng-show="sc.locationZipFile" target="_self" href="{{sc.locationZipFile}}">jsd-photos.zip</a>
         <button ng-click="sc.deleteFotos()">Delete photo's</button>
-        <button class="float-right" ng-click="sc.setSeason()">{{sc.inSeasonAction}} seizoen</button>
         Start sighting: <input ng-model="sc.startSighting"/>
         End sighting: {{ sc.endSighting }}
+
+        <button class="float-right" ng-click="sc.setSeason()">{{sc.inSeasonAction}} seizoen</button>
+        <a class="float-right" href="/#!/species">Manage species</a>
         <table class="table table-hover" style="width:100%">
             <tr>
                 <th>ID</th>
+                <th>Soort</th>
                 <th>Datum</th>
                 <th>Aantal</th>
                 <th>Leeftijd</th>
@@ -29,6 +32,7 @@
             </tr>
             <tr ng-repeat="sighting in sc.sightings">
                 <td>{{sighting.waarnemingId}}</td>
+                <td>{{sighting.species}}</td>
                 <td>{{sighting.sigthingDate | date:'yyyy-MM-dd'}}</td>
                 <td>{{sighting.numberOfChicks}}</td>
                 <td>{{sc.ages[sighting.age]}}</td>

@@ -3,20 +3,20 @@
 
     app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider
+            .when('/', {
+                templateUrl:'sighting/views/sighting.client.view.html'
+            })
             .when('/sightings', {
                 templateUrl:'sighting/views/list-sightings.client.view.html'
             })
             .when('/zipdownload', {
 
             })
-            .when('/', {
-                templateUrl:'sighting/views/sighting.client.view.html'
-            })
             .when('/voorwaarden', {
                 templateUrl:'sighting/views/conditions.client.view.html'
             })
-            .when('/iframetest', {
-                templateUrl:'sighting/views/iframetest.html'
+            .when('/species', {
+                templateUrl:'sighting/views/species.client.view.html'
             })
             .otherwise({redirectTo: '/'});
     }]);

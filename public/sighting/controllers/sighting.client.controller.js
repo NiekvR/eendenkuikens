@@ -103,6 +103,7 @@
                             this.photo.base64 = "data:image/png;base64," + this.photo.base64
                         }
                         var sighting = new sightingService({
+                            species: this.species,
                             sigthingDate: this.sigthingDate,
                             numberOfChicks: this.numberOfChicks,
                             observerName: this.observerName,
@@ -170,6 +171,23 @@
             url: '/api/season'
         }).then(function successCallback(response) {
             vm.noDuckSeason = response.data[0].inSeason;
+        }, function errorCallback(response) {
+            console.log(response)
+        });
+
+        $http({
+            method: 'GET',
+            url: '/api/species'
+        }).then(function successCallback(response) {
+            vm.species = [];
+            response.data.forEach(species => {
+                if(species.inUse) {
+                    vm.species.push(species);
+                }
+            });
+            if (vm.species[0]) {
+                $scope.species = vm.species[0].nameEN;
+            };
         }, function errorCallback(response) {
             console.log(response)
         });
