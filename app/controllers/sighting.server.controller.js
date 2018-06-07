@@ -173,12 +173,8 @@ exports.deletefotos = function (req, res) {
         dir = basedir + 'uploads/',
         message = deleteDirectoryContent(dir);
 
-    Sighting.find().sort('-sigthingDate').exec(function (err, sightings) {
-        if (err) {
-            return res.status(400).send({
-                message: getErrorMessage(err)
-            });
-        } else {
+    Sighting.find().skip(parseInt(req.query.skip)).limit(25).exec(function (err, sightings) {
+        if (sightings.length > 0) {
             sightings.forEach((sighting) => {
                 if (sighting.photo) {
                     sighting.photo = null;
@@ -191,6 +187,10 @@ exports.deletefotos = function (req, res) {
                         }
                     });
                 }
+            });
+        } else {
+            return res.status(400).send({
+                message: 'No sightings found after sighting id: ' + req.query.skip
             });
         }
     });

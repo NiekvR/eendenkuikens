@@ -39,7 +39,7 @@
 
         var updateEndSigthing = function () {
             if (vm.startSighting) {
-                vm.endSighting = parseInt(vm.startSighting) + 50;
+                vm.endSighting = parseInt(vm.startSighting) + 25;
             }
         }
 
@@ -84,7 +84,7 @@
         };
 
         vm.deleteFotos = function () {
-            $http({ method: 'GET', url: '/api/deletefotos' }).
+            $http({ method: 'GET', url: '/api/deletefotos', params: { skip: vm.startSighting } }).
                 success(function (data, status, headers, config) {
                     $.notify({
                         message: "Alle foto's zijn verwijderd van de server. Ik hoop dat je ze eerst gedownload hebt :)",

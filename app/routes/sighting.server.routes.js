@@ -22,8 +22,8 @@ module.exports = function(app) {
         .get(users.requiresLogin, sighting.read)
         //.put(users.requiresLogin, sighting.update)
         .delete(users.requiresLogin, sighting.delete);
-
-    app.route('/zipdownload').get(sighting.writeZip);
+    
+    app.route('/zipdownload/:sightingId').get(sighting.writeZip);
 
     app.param('sightingId', sighting.sightingByID);
 
