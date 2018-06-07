@@ -192,7 +192,7 @@ exports.deletefotos = function (req, res) {
         }
     });
 
-    res.status(message.status).send(message.message).end();
+    res.status(200).send('OK').end();
 };
 
 function deleteDirectoryContent(dir) {

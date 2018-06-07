@@ -35,7 +35,7 @@
 
         vm.startSighting = 0;
 
-        vm.endSighting = vm.startSighting + 50;
+        vm.endSighting = vm.startSighting + 25;
 
         var updateEndSigthing = function () {
             if (vm.startSighting) {
