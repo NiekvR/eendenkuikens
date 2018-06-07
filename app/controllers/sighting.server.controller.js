@@ -169,9 +169,6 @@ function writeZipFile(res) {
 };
 
 exports.deletefotos = function (req, res) {
-    var basedir = 'public/img/',
-        dir = basedir + 'uploads/',
-        message = deleteDirectoryContent(dir);
 
     Sighting.find().skip(parseInt(req.query.skip)).limit(25).exec(function (err, sightings) {
         if (sightings.length > 0) {
