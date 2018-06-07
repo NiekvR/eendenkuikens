@@ -82,7 +82,7 @@ exports.csv = function (req, res) {
 
 
 exports.writeZip = function (req, res) {
-    Sighting.find().skip(parseInt(req.query.skip)).limit(50).exec(function (err, sightings) {
+    Sighting.find().skip(parseInt(req.query.skip)).limit(25).exec(function (err, sightings) {
         if (sightings.length > 0) {
             writeImages(sightings);
             writeZipFile(res);
