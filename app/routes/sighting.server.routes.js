@@ -6,7 +6,7 @@ var users = require('../../app/controllers/users.server.controller'),
     multipartMiddleware = multipart();
 
 module.exports = function(app) {
-    app.route('/api/csv')
+    app.route('/api/csv/')
         .get(users.requiresLogin, sighting.csv);
 
     app.route('/api/writezip')
@@ -22,8 +22,6 @@ module.exports = function(app) {
         .get(users.requiresLogin, sighting.read)
         //.put(users.requiresLogin, sighting.update)
         .delete(users.requiresLogin, sighting.delete);
-    
-    app.route('/zipdownload/:sightingId').get(sighting.writeZip);
 
     app.param('sightingId', sighting.sightingByID);
 

@@ -36,10 +36,12 @@
         vm.startSighting = 0;
 
         vm.endSighting = vm.startSighting + 25;
+        vm.endSightingCSV = vm.startSighting + 500;
 
         var updateEndSigthing = function () {
             if (vm.startSighting) {
                 vm.endSighting = parseInt(vm.startSighting) + 25;
+                vm.endSightingCSV = parseInt(vm.startSighting) + 500;
             }
         }
 
