@@ -134,27 +134,45 @@
                 });
         }
 
-        $http({
-            method: 'GET',
-            url: '/api/sighting'
-        }).then(function successCallback(response) {
-            vm.sightings = response.data;
-            vm.sightings.forEach(sighting => {
-                console.log(sighting);
-                if(sighting.photo) {
-                    $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: sighting.photo} }).
-                        success(function (data, status, headers, config) {
-                            sighting.base64 = data.base64;
-                        }).
-                        error(function (response) {
-                            console.log('error')
+        vm.createMockData = function() {
+            $http({ method: 'GET', url: '/api/mock' }).
+                success(function (data, status, headers, config) {
+                    getSightings();
+                    $.notify({
+                        message: "MockData is succesvol aangemaakt",
+                        icon: 'glyphicon glyphicon-ok-sign'
+                    }, {
+                            type: 'success'
                         });
-                }
-                console.log(sighting);
+                }).
+                error(function (response) {
+                    console.log('error')
+                });
+        }
+
+        function getSightings() {
+            $http({
+                method: 'GET',
+                url: '/api/sighting'
+            }).then(function successCallback(response) {
+                vm.sightings = response.data;
+                vm.sightings.forEach(sighting => {
+                    if(sighting.photo) {
+                        $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: sighting.photo} }).
+                            success(function (data, status, headers, config) {
+                                sighting.base64 = data.base64;
+                            }).
+                            error(function (response) {
+                                console.log('error')
+                            });
+                    }
+                });
+            }, function errorCallback(response) {
+                console.log(response)
             });
-        }, function errorCallback(response) {
-            console.log(response)
-        });
+        }
+
+        getSightings();
 
         $http({
             method: 'GET',

@@ -276,3 +276,72 @@ exports.delete = function (req, res) {
         }
     });
 };
+
+exports.mock = function (req, res) {
+    async.times(5, function (n, next) {
+        handleMockSighting(function (err, user) {
+            next(err, user);
+        });
+    }, function (err, users) {
+        if (err) {
+            console.log(err);
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        }
+        console.log(users)
+        res.status(200).send();
+    });
+}
+
+var handleMockSighting = function (callback) {
+    var sighting = new Sighting(createMockSighting());
+    sighting.save(function (err) {
+        if (err) {
+            console.log(err);
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        }
+        sighting.waarnemingId = 'EK-2018-' + sighting.waarnemingIdCount;
+
+        var photo = new Photo({waarnemingId: sighting.waarnemingId, base64: ("data:image/png;base64," + base64_encode('public/img/IMG_4496.JPG'))});
+        photo.save(function (err) {
+            if (err) {
+                return res.status(400).send({
+                    message: getErrorMessage(err)
+                });
+            }
+        });
+        sighting.photo = photo.waarnemingId;
+
+        sighting.save(function (err) {
+            if (err) {
+                return res.status(400).send({
+                    message: getErrorMessage(err)
+                });
+            }
+        });
+        callback(null, {
+            id: sighting.waarnemingId
+        });
+    });
+}
+
+function createMockSighting() {
+    return {
+        "sigthingDate": "2018-05-01T00:00:00.000Z",
+        "numberOfChicks": 2,
+        "permission": true,
+        "lat": "52.11999865763816",
+        "lng": "4.76806640625",
+        "age": "2"
+    }
+}
+
+function base64_encode(file) {
+    // read binary data
+    var bitmap = fs.readFileSync(file);
+    // convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+}

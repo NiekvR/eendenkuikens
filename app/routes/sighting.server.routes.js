@@ -28,6 +28,9 @@ module.exports = function(app) {
 
     app.param('sightingId', sighting.sightingByID);
 
+    app.route('/api/mock')
+        .get(users.requiresLogin, sighting.mock)
+
     app.use(cors());
 
     app.route('/api/sighting')
