@@ -9,6 +9,7 @@ module.exports = function() {
 
     require('../app/models/user.server.model');
     require('../app/models/sighting.server.model');
+    require('../app/models/photo.server.model');
     require('../app/models/season.server.model');
     require('../app/models/species.server.model');
     console.log("Con 1 "+ mongoose.connection.host);

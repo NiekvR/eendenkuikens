@@ -1,10 +1,12 @@
 var mongoose = require('mongoose'),
     Sighting = mongoose.model('Sighting'),
+    Photo = mongoose.model('Photo'),
     fs = require('fs-extra'),
     path = require('path'),
     json2csv = require('json2csv'),
     archiver = require('archiver'),
-    mv = require('mv');
+    mv = require('mv')
+    async = require("async");
 
 var getErrorMessage = function (err) {
     if (err.errors) {
@@ -17,7 +19,10 @@ var getErrorMessage = function (err) {
 };
 
 exports.create = function (req, res) {
-    var sighting = new Sighting(req.body.sighting);
+    var reqSighting = req.body.sighting;
+    var photoBase64 = reqSighting.photo;
+    reqSighting.photo = null;
+    var sighting = new Sighting(reqSighting);
     sighting.save(function (err) {
         if (err) {
             console.log(err);
@@ -26,6 +31,19 @@ exports.create = function (req, res) {
             });
         }
         sighting.waarnemingId = 'EK-2018-' + sighting.waarnemingIdCount;
+
+        if(photoBase64) {
+            var photo = new Photo({waarnemingId: sighting.waarnemingId, base64: photoBase64});
+            photo.save(function (err) {
+                if (err) {
+                    return res.status(400).send({
+                        message: getErrorMessage(err)
+                    });
+                }
+            });
+            sighting.photo = photo.waarnemingId;
+        }
+
         sighting.save(function (err) {
             if (err) {
                 return res.status(400).send({
@@ -37,6 +55,18 @@ exports.create = function (req, res) {
         res.json(sighting);
     });
 };
+
+exports.getPhoto = function (req, res) {
+    Photo.findOne({waarnemingId: req.query.waarnemingId}).exec(function (err, photo) {
+        if (err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        } else {
+            res.json(photo);
+        }
+    });
+}
 
 exports.list = function (req, res) {
     Sighting.find().limit(50).sort('-sigthingDate').exec(function (err, sightings) {

@@ -45,7 +45,7 @@
                 <td>{{sc.habitatTypes[sighting.habitat]}}</td>
                 <td>{{sighting.remarks}}</td>
                 <td>{{sighting.permission}}</td>
-                <td><div ng-if="sighting.photo"><img class="tumbnail_size" ng-src="{{sighting.photo}}"/></div>
+                <td><div ng-if="sighting.photo"><img class="tumbnail_size" ng-src="{{sighting.base64}}"/></div>
                 <div ng-if="!sighting.photo">Geen foto beschikbaar</div></td>
             </tr>
         </table>

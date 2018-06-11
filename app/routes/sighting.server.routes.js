@@ -18,6 +18,9 @@ module.exports = function(app) {
     app.route('/api/sighting')
         .get(users.requiresLogin, sighting.list)
 
+    app.route('/api/photo')
+        .get(users.requiresLogin, sighting.getPhoto)
+
     app.route('/api/sighting/:sightingId')
         .get(users.requiresLogin, sighting.read)
         //.put(users.requiresLogin, sighting.update)

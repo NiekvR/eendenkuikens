@@ -124,11 +124,34 @@
                 });
         }
 
+        vm.getPhoto = function (waarnemingId) {
+            $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: waarnemingId} }).
+                success(function (data, status, headers, config) {
+                    return data.base64
+                }).
+                error(function (response) {
+                    console.log('error')
+                });
+        }
+
         $http({
             method: 'GET',
             url: '/api/sighting'
         }).then(function successCallback(response) {
             vm.sightings = response.data;
+            vm.sightings.forEach(sighting => {
+                console.log(sighting);
+                if(sighting.photo) {
+                    $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: sighting.photo} }).
+                        success(function (data, status, headers, config) {
+                            sighting.base64 = data.base64;
+                        }).
+                        error(function (response) {
+                            console.log('error')
+                        });
+                }
+                console.log(sighting);
+            });
         }, function errorCallback(response) {
             console.log(response)
         });
