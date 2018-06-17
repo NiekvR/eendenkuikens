@@ -84,26 +84,50 @@ var fields = ['sigthingDate', 'waarnemingId', 'numberOfChicks', 'observerName', 
 var fieldsQ = 'sigthingDate waarnemingId numberOfChicks observerName observerEmail gezinEerderGemeld gezinEerderGemeldWithId habitat remarks lat lng age permission';
 
 exports.csv = function (req, res) {
-    console.log("Starting CSV export");
-    Sighting.find({}, fieldsQ).skip(parseInt(req.query.skip)).limit(500).exec(function (err, sightings) {
-        if (err) {
-            console.log(err)
+    async.waterfall([
+        function(callback) {
+            Sighting.count().exec(function(err, count) {
+                if (err) {
+                    console.log(err);
+                    callback(err);
+                } else {
+                    callback(null, count);
+                }
+            });
+        },
+        function(count, callback) {
+            async.timesLimit(count, 5, function (n, next) {
+                Sighting.findOne().skip(n).exec(function(err, sighting) {
+                    if(err) {
+                        next(err);
+                    }
+                    next(null, sighting);
+                });
+            }, function (err, sightings) {
+                if (err) {
+                    console.log(err);
+                    callback(err);
+                }
+                callback(null, sightings);
+            });
+        }
+    ], function (err, result) {
+        if(err) {
             return res.status(400).send({
                 message: getErrorMessage(err)
             });
-        }
-        else {
-            console.log("JSON to CSV");
-            json2csv({ data: sightings, fields: fields, del: ';' }, function (err, tsv) {
+        } else if (result) {
+            console.log('result', result.length);
+            json2csv({ data: result, fields: fields, del: ';' }, function (err, csv) {
                 if (err) {
                     return res.status(400).send({
                         message: getErrorMessage(err)
                     });
                 } else {
-                    res.setHeader('content-type', 'text/csv');
-                    res.setHeader('content-disposition', "attachment; filename='sightings.csv'");
-                    res.set('Content-Type', 'application/octet-stream');
-                    res.send(tsv);
+                    res.setHeader('content-disposition', 'attachment; filename=sightings.csv');
+                    res.set('content-type', 'text/csv');
+                    console.log(res);
+                    return res.status(200).send(csv).end();
                 }
             });
         }
@@ -112,19 +136,10 @@ exports.csv = function (req, res) {
 
 
 exports.writeZip = function (req, res) {
-    Sighting.find().skip(parseInt(req.query.skip)).limit(25).exec(function (err, sightings) {
-        if (sightings.length > 0) {
-            writeImages(sightings);
-            writeZipFile(res);
-        } else {
-            return res.status(400).send({
-                message: 'No sightings found after sighting id: ' + req.query.skip
-            });
-        }
-    });
+    writeImages(res);
 }
 
-function writeImages(sightings) {
+function writeImages(res) {
     console.log("Start writing images")
     if (!fs.existsSync(path.join(__dirname, '../../public/img/uploads/'))) {
         fs.mkdirSync(path.join(__dirname, '../../public/img/uploads/'));
@@ -132,31 +147,63 @@ function writeImages(sightings) {
         fs.emptyDirSync(path.join(__dirname, '../../public/img/uploads/'));
     }
 
-    sightings.forEach((sighting) => {
-        if (sighting.photo) {
-            console.log("Creating photo for observation: " + sighting.waarnemingId)
-            let base64Image = sighting.photo.split(';base64,').pop();
-
-            var uploadDate = new Date().toISOString();
-            uploadDate = uploadDate.replace('.', '');
-            uploadDate = uploadDate.replace(':', '');
-            uploadDate = uploadDate.replace(':', '');
-            var filename = uploadDate + '_EK-2018-' + sighting.waarnemingIdCount;
-            var targetPath = path.join(__dirname, '../../public/img/uploads/');
-            var savePath = targetPath + filename + '.png';
-
-            fs.writeFile(savePath, base64Image, { encoding: 'base64' }, function (err) {
+    async.waterfall([
+        function(callback) {
+            Photo.count().exec(function(err, count) {
                 if (err) {
                     console.log(err);
-                    return res.status(400).send({
-                        message: getErrorMessage(err)
-                    });
+                    callback(err);
+                } else {
+                    callback(null, count);
                 }
             });
-        } else {
-            console.log("No photo for observation: " + sighting.waarnemingId)
+        },
+        function(count, callback) {
+            async.timesLimit(count, 5, function (n, next) {
+                writeImage(n, function (err, waarnemingId) {
+                    next(err, waarnemingId);
+                });
+            }, function (err, waarnemingIds) {
+                if (err) {
+                    console.log(err);
+                    callback(err);
+                }
+                callback(null, waarnemingIds);
+            });
         }
-        console.log("END writing images")
+    ], function (err, result) {
+        if(err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        } else if (result) {
+            console.log('count', result);
+            writeZipFile(res);
+        }
+    });
+}
+
+function writeImage(skip, callback) {
+    Photo.findOne().skip(skip).exec(function (err, photo) {
+        console.log("Creating photo for observation: " + photo.waarnemingId)
+        let base64Image = photo.base64.split(';base64,').pop();
+
+        var uploadDate = new Date().toISOString();
+        uploadDate = uploadDate.replace('.', '');
+        uploadDate = uploadDate.replace(':', '');
+        uploadDate = uploadDate.replace(':', '');
+        var filename = uploadDate + '_EK-2018-' + photo.waarnemingId;
+        var targetPath = path.join(__dirname, '../../public/img/uploads/');
+        var savePath = targetPath + filename + '.png';
+
+        fs.writeFile(savePath, base64Image, { encoding: 'base64' }, function (err) {
+            if (err) {
+                console.log(err);
+                callback(err);
+            } else {
+                callback(null, photo.waarnemingId);
+            }
+        });
     });
 }
 
@@ -199,44 +246,93 @@ function writeZipFile(res) {
 };
 
 exports.deletefotos = function (req, res) {
-
-    Sighting.find().skip(parseInt(req.query.skip)).limit(25).exec(function (err, sightings) {
-        if (sightings.length > 0) {
-            sightings.forEach((sighting) => {
-                if (sighting.photo) {
-                    sighting.photo = null;
-                    sighting.save(function (err) {
-                        if (err) {
-                            console.log(err);
-                            return res.status(400).send({
-                                message: getErrorMessage(err)
-                            });
-                        }
-                    });
+    async.waterfall([
+        function(callback) {
+            deleteImage(function(err) {
+                if(err) {
+                    callback(err);
                 }
+                callback(null);
             });
-        } else {
+        },
+        function(callback) {
+            removeImageReferences(function(err) {
+                if(err) {
+                    callback(err);
+                }
+                callback(null);
+            })
+        }
+    ], function (err, result) {
+        if(err) {
             return res.status(400).send({
-                message: 'No sightings found after sighting id: ' + req.query.skip
+                message: getErrorMessage(err)
             });
         }
+        return res.status('200').send();
     });
-
-    res.status(200).send('OK').end();
 };
 
-function deleteDirectoryContent(dir) {
-    var files = fs.readdirSync(dir);
-    files.forEach(function (file) {
-        fs.unlink(dir + file, function (err) {
-            if (err) {
-                console.log("Error: " + err);
-                throw err
-            }
-        });
+function deleteImage(callback) {
+    Photo.remove({}, function(err) {
+        if(err) {
+            callback(err);
+        }
+        callback(null);
     });
-    console.log("Deleting fotos completed");
-    return { status: 200, message: 'OK' };
+}
+
+function removeImageReferences(callback) {
+    async.waterfall([
+        function(callback) {
+            Sighting.count().exec(function(err, count) {
+                if (err) {
+                    console.log(err);
+                    callback(err);
+                } else {
+                    callback(null, count);
+                }
+            });
+        },
+        function(count, callback) {
+            async.timesLimit(count, 5, function (n, next) {
+                removeImageReference(n, function (err, waarnemingId) {
+                    next(err, waarnemingId);
+                });
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                    callback(err);
+                }
+                callback(null);
+            });
+        }
+    ], function (err, result) {
+        if(err) {
+            callback(err);
+        }
+        callback(null);
+    });
+}
+
+function removeImageReference(skip, callback) {
+    Sighting.findOne().skip(skip).exec(function(err, sighting) {
+        var waarnemingId = sighting.waarnemingId;
+        console.log('skip', skip);
+        console.log('waarnemingId', waarnemingId);
+        if(sighting.photo) {
+            sighting.photo = null;
+            sighting.save(function (err) {
+                if(err) {
+                    callback(err);
+                }
+                console.log('Updating sighting: ' + waarnemingId);
+                callback(null, waarnemingId);
+            });
+        } else {
+            callback(null);
+        };
+    });
 }
 
 function getDirectoryList(dir) {
@@ -278,7 +374,7 @@ exports.delete = function (req, res) {
 };
 
 exports.mock = function (req, res) {
-    async.times(5, function (n, next) {
+    async.times(50, function (n, next) {
         handleMockSighting(function (err, user) {
             next(err, user);
         });

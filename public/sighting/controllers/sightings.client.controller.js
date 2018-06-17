@@ -48,7 +48,7 @@
         $scope.$watch('sc.startSighting', updateEndSigthing);
 
         vm.csv = function () {
-            $http({ method: 'GET', url: '/api/csv' })
+            $http({ method: 'GET', url: '/api/csv' }).
             success(function(data, status, headers, config) {
                 var anchor = angular.element('<a/>');
                 anchor.attr({
@@ -65,7 +65,7 @@
         vm.locationZipFile = null;
 
         vm.writeZip = function () {
-            $http({ method: 'GET', url: '/api/writezip', params: { skip: vm.startSighting } }).
+            $http({ method: 'GET', url: '/api/writezip'}).
                 success(function (data, status, headers, config) {
                     vm.locationZipFile = data;
                     $.notify({
@@ -86,8 +86,9 @@
         };
 
         vm.deleteFotos = function () {
-            $http({ method: 'GET', url: '/api/deletefotos', params: { skip: vm.startSighting } }).
+            $http({ method: 'GET', url: '/api/deletefotos'}).
                 success(function (data, status, headers, config) {
+                    getSightings();
                     $.notify({
                         message: "Alle foto's zijn verwijderd van de server. Ik hoop dat je ze eerst gedownload hebt :)",
                         icon: 'glyphicon glyphicon-ok-sign'
@@ -109,7 +110,7 @@
         }
 
         vm.setSeason = function () {
-            $http({ method: 'POST', url: '/api/season', data: { inSeason: !vm.inSeason } }).
+            $http({ method: 'POST', url: '/api/season' }).
                 success(function (data, status, headers, config) {
                     vm.seasonOpenedOrClosed(data.inSeason);
                     $.notify({
