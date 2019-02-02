@@ -30,7 +30,7 @@ exports.create = function (req, res) {
                 message: getErrorMessage(err)
             });
         }
-        sighting.waarnemingId = 'EK-2018-' + sighting.waarnemingIdCount;
+        sighting.waarnemingId = 'EK-2019-' + sighting.waarnemingIdCount;
 
         if(photoBase64) {
             var photo = new Photo({waarnemingId: sighting.waarnemingId, base64: photoBase64});
@@ -192,7 +192,7 @@ function writeImage(skip, callback) {
         uploadDate = uploadDate.replace('.', '');
         uploadDate = uploadDate.replace(':', '');
         uploadDate = uploadDate.replace(':', '');
-        var filename = uploadDate + '_EK-2018-' + photo.waarnemingId;
+        var filename = uploadDate + '_EK-2019-' + photo.waarnemingId;
         var targetPath = path.join(__dirname, '../../public/img/uploads/');
         var savePath = targetPath + filename + '.png';
 
@@ -399,7 +399,7 @@ var handleMockSighting = function (callback) {
                 message: getErrorMessage(err)
             });
         }
-        sighting.waarnemingId = 'EK-2018-' + sighting.waarnemingIdCount;
+        sighting.waarnemingId = 'EK-2019-' + sighting.waarnemingIdCount;
 
         var photo = new Photo({waarnemingId: sighting.waarnemingId, base64: ("data:image/png;base64," + base64_encode('public/img/IMG_4496.JPG'))});
         photo.save(function (err) {
@@ -426,7 +426,7 @@ var handleMockSighting = function (callback) {
 
 function createMockSighting() {
     return {
-        "sigthingDate": "2018-05-01T00:00:00.000Z",
+        "sigthingDate": "2019-05-01T00:00:00.000Z",
         "numberOfChicks": 2,
         "permission": true,
         "lat": "52.11999865763816",
