@@ -12,9 +12,9 @@
     <h2 class="help-block text-center">{{ic.waarneming}}</h1>
         <p class="text-center">{{ic.letOp}}</p>
         <form class="form-inline" name="myForm" novalidate>
-            <div class="form-group" ng-if="ic.species.length > 0">
+            <div class="form-group" ng-if="ic.species.length > 1">
                 <label>Soort:</label>
-                <a popover-placement="top" uib-popover={{ic.helpTekstHabitat}}>
+                <a popover-placement="top" uib-popover={{ic.helpTekstSoort}}>
                     <img class="information_img" src="img/information.png" />
                 </a>
                 <select class="form-control" name="species" data-ng-model="species" id="species">

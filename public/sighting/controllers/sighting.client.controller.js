@@ -17,6 +17,8 @@
         vm.waarneming = 'Voer hier uw waarneming van families wilde eenden in.';
         vm.letOp = 'Let op: dit formulier is alleen bedoeld voor wilde eenden, dus niet voor krakeenden, slobeenden of andere eendensoorten.';
 
+        vm.helpTekstSoort = 'Selecteer hier de soort eendenkuikens die u heeft gezien.';
+
         vm.helpTekstDatum = 'Wanneer heeft u de eendenkuikens gezien?';
 
         vm.helpTekstAantalKuikens = 'Hoeveel kuikens telde u bij de moeder? Meld s.v.p. één gezin per waarneming.';
