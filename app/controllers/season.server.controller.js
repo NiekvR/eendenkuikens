@@ -18,7 +18,6 @@ exports.inSeason = function (req, res, next) {
                 message: getErrorMessage(err)
             });
         } else {
-            console.log(season);
             if (season[0].inSeason) {
                 next()
             } else {
@@ -43,7 +42,6 @@ exports.getSeason = function (req, res) {
 }
 
 exports.updateSeason = function (req, res) {
-    console.log(req.body.inSeason);
     if (req.body.inSeason !== undefined) {
         var season = new Season({ inSeason: req.body.inSeason, date: new Date() });
         season.save(function (err) {
@@ -54,7 +52,6 @@ exports.updateSeason = function (req, res) {
                 return res.redirect('/signup');
             }
         });
-        console.log(season);
         res.json(season);
     } else {
         var message = getErrorMessage('Request not valid');

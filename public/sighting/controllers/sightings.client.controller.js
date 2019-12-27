@@ -182,7 +182,8 @@
                 method: 'GET',
                 url: '/api/sighting'
             }).then(function successCallback(response) {
-                vm.sightings = response.data;
+                vm.sightings = response.data.sort(function(a, b) {
+                    return b.waarnemingId.localeCompare(a.waarnemingId)});
                 vm.sightings.forEach(sighting => {
                     if(sighting.photo) {
                         $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: sighting.photo} }).

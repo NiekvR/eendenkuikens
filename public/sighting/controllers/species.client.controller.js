@@ -46,7 +46,6 @@
             vm.changeSpecies.speciesLatin = species.speciesLatin;
             vm.changeSpecies.familyLatin = species.familyLatin;
             vm.changeSpecies.inUse = species.inUse;
-            console.log(vm.changeSpecies);
         }
 
         $scope.create = function (species) {

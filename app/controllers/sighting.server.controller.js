@@ -19,7 +19,6 @@ var getErrorMessage = function (err) {
 };
 
 exports.create = function (req, res) {
-    console.log(req.body.sighting);
     var reqSighting = req.body.sighting;
     var photoBase64 = reqSighting.photo;
     reqSighting.photo = null;
@@ -52,7 +51,6 @@ exports.create = function (req, res) {
                 });
             }
         });
-        console.log('waarnemingId: ' + sighting.waarnemingId);
         res.json(sighting);
     });
 };
@@ -117,7 +115,6 @@ exports.csv = function (req, res) {
                 message: getErrorMessage(err)
             });
         } else if (result) {
-            console.log('result', result.length);
             json2csv({ data: result, fields: fields, del: ';' }, function (err, csv) {
                 if (err) {
                     return res.status(400).send({
@@ -126,7 +123,6 @@ exports.csv = function (req, res) {
                 } else {
                     res.setHeader('content-disposition', 'attachment; filename=sightings.csv');
                     res.set('content-type', 'text/csv');
-                    console.log(res);
                     return res.status(200).send(csv).end();
                 }
             });
@@ -177,7 +173,6 @@ function writeImages(res) {
                 message: getErrorMessage(err)
             });
         } else if (result) {
-            console.log('count', result);
             writeZipFile(res);
         }
     });
@@ -318,8 +313,6 @@ function removeImageReferences(callback) {
 function removeImageReference(skip, callback) {
     Sighting.findOne().skip(skip).exec(function(err, sighting) {
         var waarnemingId = sighting.waarnemingId;
-        console.log('skip', skip);
-        console.log('waarnemingId', waarnemingId);
         if(sighting.photo) {
             sighting.photo = null;
             sighting.save(function (err) {
