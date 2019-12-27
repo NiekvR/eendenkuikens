@@ -29,7 +29,7 @@
     "fs-extra": "^0.26.7",
     "grunt": "latest",
     "json2csv": "^3.3.0",
-    "method-override": "~2.2.0",
+    "method-override": "~2.3.10",
     "mongoose": "~4.1.12",
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-file": "0.0.2",
