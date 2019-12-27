@@ -67,6 +67,24 @@ var SightingSchema = Schema({
     },
     photo: {
         type: String
+    },
+    surface: {
+        type: String
+    },
+    shore: {
+        type: String
+    },
+    water: {
+        type: String
+    },
+    numberOfDeaths: {
+        type: Number
+    },
+    causeOfDeath: {
+        type: String
+    },
+    extraFeedings: {
+        type: String
     }
 
 });

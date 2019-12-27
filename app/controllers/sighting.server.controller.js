@@ -19,6 +19,7 @@ var getErrorMessage = function (err) {
 };
 
 exports.create = function (req, res) {
+    console.log(req.body.sighting);
     var reqSighting = req.body.sighting;
     var photoBase64 = reqSighting.photo;
     reqSighting.photo = null;

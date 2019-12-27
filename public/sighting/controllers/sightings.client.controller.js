@@ -25,7 +25,49 @@
             "agrarisch": "agrarisch",
             "nb": "natuur",
             "natuur": "natuur"
-        }
+        };
+
+        vm.species = {
+            "mal": "Wilde Eend",
+            "dom": "Soepeend",
+            "kra": "Krakeend"
+        };
+
+        vm.shore = {
+            "nno": "Kaal",
+            "nlv": "Lage veg",
+            "nhv": "Hoge veg",
+            "emb": "Kade",
+            "oth": "Anders"
+        };
+
+        vm.water = {
+            "cle": "Helder",
+            "tur": "Troebel",
+            "wee": "Kroos",
+            "oth": "Anders"
+        };
+
+        vm.causeOfDeath = {
+            "pre": "Predatie",
+            "agg": "Agressie",
+            "hac": "Mens",
+            "bon": "Vogel",
+            "bre": "Blauwe Reiger",
+            "zkr": "Zwarte kraai",
+            "bui": "Buizerd",
+            "zon": "Zoogdier",
+            "hon": "Hond",
+            "kat": "Kat",
+            "rat": "Rat",
+            "von": "Vis",
+            "sno": "Snoek",
+            "kar": "Karper",
+            "nijl": "Nijlgangs",
+            "mee": "Meerkoet",
+            "ver": "Verkeer",
+            "maa": "Maaien"
+        };
 
         vm.title = 'Eendenkuikenproject';
 
@@ -129,22 +171,6 @@
             $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: waarnemingId} }).
                 success(function (data, status, headers, config) {
                     return data.base64
-                }).
-                error(function (response) {
-                    console.log('error')
-                });
-        }
-
-        vm.createMockData = function() {
-            $http({ method: 'GET', url: '/api/mock' }).
-                success(function (data, status, headers, config) {
-                    getSightings();
-                    $.notify({
-                        message: "MockData is succesvol aangemaakt",
-                        icon: 'glyphicon glyphicon-ok-sign'
-                    }, {
-                            type: 'success'
-                        });
                 }).
                 error(function (response) {
                     console.log('error')

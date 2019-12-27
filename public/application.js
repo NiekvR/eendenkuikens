@@ -1,7 +1,7 @@
-var mainApplicationModuleName = 'eendenkuikenproject';
+var mainApplicationModuleName = 'kuikenTeller';
 
 var mainApplicationModule = angular.module(mainApplicationModuleName,
-    ['ngResource','ngRoute','uiGmapgoogle-maps','users','login','sighting','ngFileUpload','ui.bootstrap','naif.base64']);
+    ['ngResource','ngRoute','users','login','sighting','ngFileUpload','ui.bootstrap','naif.base64']);
 
 mainApplicationModule.config(['$locationProvider',
     function($locationProvider) {
