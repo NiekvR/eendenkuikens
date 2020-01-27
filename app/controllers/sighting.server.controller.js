@@ -18,6 +18,18 @@ var getErrorMessage = function (err) {
     }
 };
 
+exports.resetCount = function (req, res) {
+    var sighting = new Sighting();
+    sighting.resetCount(function(err) {
+        if(err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        }
+        res.sendStatus(200);
+    });
+};
+
 exports.create = function (req, res) {
     var reqSighting = req.body.sighting;
     var photoBase64 = reqSighting.photo;
@@ -30,7 +42,7 @@ exports.create = function (req, res) {
                 message: getErrorMessage(err)
             });
         }
-        sighting.waarnemingId = 'EK-2019-' + sighting.waarnemingIdCount;
+        sighting.waarnemingId = 'KT-2020-' + sighting.waarnemingIdCount;
 
         if(photoBase64) {
             var photo = new Photo({waarnemingId: sighting.waarnemingId, base64: photoBase64});

@@ -65,8 +65,10 @@
             "kar": "Karper",
             "nijl": "Nijlgangs",
             "mee": "Meerkoet",
+            "aot": "Agressie anders",
             "ver": "Verkeer",
-            "maa": "Maaien"
+            "maa": "Maaien",
+            "hot": "Menselijke activiteit anders"
         };
 
         vm.title = 'Eendenkuikenproject';
@@ -165,7 +167,22 @@
                 error(function (response) {
                     console.log('error')
                 });
-        }
+        };
+
+        vm.resetCount = function () {
+            $http({ method: 'POST', url: '/api/sighting/resetcount' }).
+            success(function (data, status, headers, config) {
+                $.notify({
+                    message: "Teller gereset",
+                    icon: 'glyphicon glyphicon-ok-sign'
+                }, {
+                    type: 'success'
+                });
+            }).
+            error(function (response) {
+                console.log('error');
+            });
+        };
 
         vm.getPhoto = function (waarnemingId) {
             $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: waarnemingId} }).

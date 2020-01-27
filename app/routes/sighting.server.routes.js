@@ -16,10 +16,13 @@ module.exports = function(app) {
         .get(users.requiresLogin, sighting.deletefotos);
 
     app.route('/api/sighting')
-        .get(users.requiresLogin, sighting.list)
+        .get(users.requiresLogin, sighting.list);
+
+    app.route('/api/sighting/resetcount')
+        .post(users.requiresLogin, sighting.resetCount);
 
     app.route('/api/photo')
-        .get(users.requiresLogin, sighting.getPhoto)
+        .get(users.requiresLogin, sighting.getPhoto);
 
     app.route('/api/sighting/:sightingId')
         .get(users.requiresLogin, sighting.read)
@@ -29,7 +32,7 @@ module.exports = function(app) {
     app.param('sightingId', sighting.sightingByID);
 
     app.route('/api/mock')
-        .get(users.requiresLogin, sighting.mock)
+        .get(users.requiresLogin, sighting.mock);
 
     app.use(cors());
 

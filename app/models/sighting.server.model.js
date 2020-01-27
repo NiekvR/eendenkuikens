@@ -85,9 +85,14 @@ var SightingSchema = Schema({
     },
     extraFeedings: {
         type: String
+    },
+    version: {
+        type: String,
+        required: 'Deze versie van de applicatie wordt niet meer ondersteund. Gooi deze applicatie van je telefoon en ga naar www.kuikenteller.nl voor de nieuwste versie'
     }
+
 
 });
 
-SightingSchema.plugin(autoIncrement.plugin, { model: 'Sighting', field: 'waarnemingIdCount' });
+SightingSchema.plugin(autoIncrement.plugin, { model: 'Sighting', field: 'waarnemingIdCount', startAt: 0 });
 mongoose.model('Sighting', SightingSchema);
