@@ -34,12 +34,9 @@ var SightingSchema = Schema({
         match: [/.+\@.+\..+/, "Het emailadres voldoet niet aan de eisen, bijv. email@email.com"]
     },
     gezinEerderGemeld: {
-        type: Boolean
-    },
-    gezinEerderGemeldWithId: {
         type: String
     },
-    habitat: {
+    certaintyRecapture: {
         type: String
     },
     remarks: {
@@ -90,8 +87,6 @@ var SightingSchema = Schema({
         type: String,
         required: 'Deze versie van de applicatie wordt niet meer ondersteund. Gooi deze applicatie van je telefoon en ga naar www.kuikenteller.nl voor de nieuwste versie'
     }
-
-
 });
 
 SightingSchema.plugin(autoIncrement.plugin, { model: 'Sighting', field: 'waarnemingIdCount', startAt: 0 });

@@ -91,7 +91,7 @@ exports.list = function (req, res) {
     });
 };
 
-var fields = ['sigthingDate', 'waarnemingId', 'species', 'numberOfChicks', 'observerName', 'observerEmail', 'gezinEerderGemeld', 'gezinEerderGemeldWithId', 'habitat', 'remarks', 'lat', 'lng', 'age', 'permission', 'surface', 'shore', 'water', 'numberOfDeaths', 'causeOfDeath', 'extraFeedings'];
+var fields = ['sigthingDate', 'waarnemingId', 'species', 'numberOfChicks', 'observerName', 'observerEmail', 'gezinEerderGemeld', 'certaintyRecapture', 'remarks', 'lat', 'lng', 'age', 'permission', 'surface', 'shore', 'water', 'numberOfDeaths', 'causeOfDeath', 'extraFeedings'];
 
 exports.csv = function (req, res) {
     async.waterfall([

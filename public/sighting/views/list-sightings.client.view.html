@@ -24,7 +24,7 @@
                     <th>Waarnemer</th>
                     <th>Email</th>
                     <th>GEG</th>
-                    <th>Habitat</th>
+                    <th>Zekerheid GEG</th>
                     <th>Opmerking</th>
                     <th>AV</th>
                     <th>Photo</th>
@@ -45,8 +45,8 @@
                     <td>{{sighting.lng}}</td>
                     <td>{{sighting.observerName}}</td>
                     <td>{{sighting.observerEmail}}</td>
-                    <td>{{sighting.gezinEerderGemeld}} {{sighting.gezinEerderGemeldWithId}}</td>
-                    <td>{{sc.habitatTypes[sighting.habitat]}}</td>
+                    <td>{{sighting.gezinEerderGemeld}}</td>
+                    <td>{{sighting.certaintyRecapture}}</td>
                     <td>{{sighting.remarks}}</td>
                     <td>{{sighting.permission}}</td>
                     <td><div ng-if="sighting.photo"><img class="tumbnail_size" ng-src="{{sighting.base64}}"/></div>
