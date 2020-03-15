@@ -8,14 +8,14 @@
         var vm = this;
 
         vm.ages = {
-            "0": "0-1 week",
-            "1": "1-2 weken",
-            "2": "2-3 weken",
-            "3": "3-4 weken",
-            "4": "4-5 weken",
-            "5": "5-6 weken",
-            "6": "6-7 weken",
-            "7": ">7 weken"
+            "1": "0-1 week",
+            "2": "1-2 weken",
+            "3": "2-3 weken",
+            "4": "3-4 weken",
+            "5": "4-5 weken",
+            "6": "5-6 weken",
+            "7": "6-7 weken",
+            "8": ">7 weken"
         }
 
         vm.habitatTypes = {
@@ -199,8 +199,11 @@
                 method: 'GET',
                 url: '/api/sighting'
             }).then(function successCallback(response) {
-                vm.sightings = response.data.sort(function(a, b) {
-                    return b.waarnemingId.localeCompare(a.waarnemingId)});
+                vm.sightings = response.data.sort((a, b) => {
+                    const bId = parseInt(b.waarnemingId.split('-')[2]);
+                    const aId = parseInt(a.waarnemingId.split('-')[2]);
+                    return bId - aId;
+                });
                 vm.sightings.forEach(sighting => {
                     if(sighting.photo) {
                         $http({ method: 'GET', url: '/api/photo', params: { waarnemingId: sighting.photo} }).
